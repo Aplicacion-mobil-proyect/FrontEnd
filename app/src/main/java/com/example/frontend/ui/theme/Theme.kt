@@ -1,58 +1,69 @@
 package com.example.frontend.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+import androidx.compose.ui.graphics.Color
+import com.example.frontend.model.EstadosRecinto
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = Burdeo,
     onPrimary = Color.White,
+    primaryContainer = BurdeoContenedor,
+    onPrimaryContainer = BurdeoOscuroContenedor,
+    secondary = Dorado,
     onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondaryContainer = DoradoContenedor,
+    onSecondaryContainer = DoradoOscuroContenedor,
+    tertiary = Piedra,
+    background = FondoClaro,
+    surface = FondoClaro
 )
 
+private val DarkColorScheme = darkColorScheme(
+    primary = BurdeoClaro,
+    onPrimary = BurdeoOscuroContenedor,
+    primaryContainer = BurdeoOscuroContenedor,
+    onPrimaryContainer = BurdeoContenedor,
+    secondary = DoradoClaro,
+    onSecondary = DoradoOscuroContenedor,
+    secondaryContainer = DoradoOscuroContenedor,
+    onSecondaryContainer = DoradoContenedor,
+    tertiary = PiedraClaro,
+    background = FondoOscuro,
+    surface = FondoOscuro
+)
+
+/**
+ * Tema de la app. No usa colores dinámicos (los del fondo de pantalla del celular)
+ * para mantener la identidad visual del Arzobispado en todos los dispositivos.
+ */
 @Composable
 fun FrontEndTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
         typography = Typography,
         content = content
     )
+}
+
+/** Color asociado a cada estado de recinto. Úsenlo en mapa, ficha y pantallas de encargado. */
+fun colorEstado(estado: String): Color = when (estado) {
+    EstadosRecinto.ABIERTO -> EstadoAbierto
+    EstadosRecinto.CERRADO -> EstadoCerrado
+    EstadosRecinto.EN_CELEBRACION -> EstadoCelebracion
+    else -> Piedra
+}
+
+/** Texto legible de cada estado. */
+fun textoEstado(estado: String): String = when (estado) {
+    EstadosRecinto.ABIERTO -> "Abierto"
+    EstadosRecinto.CERRADO -> "Cerrado"
+    EstadosRecinto.EN_CELEBRACION -> "En celebración"
+    else -> estado
 }
