@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Archivos temporales de Kotlin (no se suben)
+.kotlin
