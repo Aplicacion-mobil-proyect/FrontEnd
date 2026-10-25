@@ -7,14 +7,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.frontend.view.CambiarEstadoScreen
+import com.example.frontend.view.CercanosScreen
+import com.example.frontend.view.CrearRutaScreen
 import com.example.frontend.view.EditarHorariosScreen
 import com.example.frontend.view.EventoDetalleScreen
 import com.example.frontend.view.EventoFormScreen
 import com.example.frontend.view.EventosScreen
 import com.example.frontend.view.FavoritosScreen
+import com.example.frontend.view.FichaScreen
 import com.example.frontend.view.GestionEventosScreen
+import com.example.frontend.view.IniciarRutaScreen
 import com.example.frontend.view.HomeScreen
+import com.example.frontend.view.MapaScreen
 import com.example.frontend.view.MiRecintoScreen
+import com.example.frontend.view.MisRutasScreen
 import com.example.frontend.view.MisVisitasScreen
 import com.example.frontend.view.LoginScreen
 import com.example.frontend.view.PerfilScreen
@@ -37,16 +43,15 @@ fun AppNavigation() {
 
         // ----- Turista / colegio -----
         composable(Rutas.HOME) { HomeScreen(navController) }
-        composable(Rutas.MAPA) { EnConstruccion("Mapa patrimonial", navController) }    // Taylor
-        composable(Rutas.CERCANOS) { EnConstruccion("Recintos cercanos", navController) } // Taylor
+        composable(Rutas.MAPA) { MapaScreen(navController) }
+        composable(Rutas.CERCANOS) { CercanosScreen(navController) }
         composable(Rutas.ESCANER_QR) { QrScreen(navController) }                          // Taylor
 
         composable(
             route = Rutas.FICHA,
             arguments = listOf(navArgument("recintoId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val recintoId = backStackEntry.arguments?.getInt("recintoId") ?: 0
-            EnConstruccion("Ficha patrimonial #$recintoId", navController)             // Taylor
+        ) {
+            FichaScreen(navController)
         }
 
         composable(Rutas.EVENTOS) { EventosScreen(navController) }
@@ -63,12 +68,12 @@ fun AppNavigation() {
             arguments = listOf(navArgument("recintoId") { type = NavType.IntType })
         ) { EnConstruccion("Planificar visita", navController) }                         // Taylor
 
-        composable(Rutas.MIS_RUTAS) { EnConstruccion("Mis rutas", navController) }      // Taylor
-        composable(Rutas.CREAR_RUTA) { EnConstruccion("Crear ruta", navController) }    // Taylor
+        composable(Rutas.MIS_RUTAS) { MisRutasScreen(navController) }
+        composable(Rutas.CREAR_RUTA) { CrearRutaScreen(navController) }
         composable(
             route = Rutas.INICIAR_RUTA,
             arguments = listOf(navArgument("rutaId") { type = NavType.IntType })
-        ) { EnConstruccion("Iniciar ruta", navController) }                              // Taylor
+        ) { IniciarRutaScreen(navController) }
 
         composable(Rutas.PERFIL) { PerfilScreen(navController) }
 

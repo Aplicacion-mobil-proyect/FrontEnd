@@ -11,6 +11,8 @@ import com.example.frontend.model.EventoConRecinto
 import com.example.frontend.model.Favorito
 import com.example.frontend.model.Horario
 import com.example.frontend.model.Recinto
+import com.example.frontend.model.Ruta
+import com.example.frontend.model.RutaParada
 import com.example.frontend.model.Visita
 import com.example.frontend.model.VisitaDetalle
 import kotlinx.coroutines.flow.Flow
@@ -118,4 +120,50 @@ abstract class PatrimonioDao {
 
     @Insert
     abstract suspend fun insertarVisitas(visitas: List<Visita>)
+
+    // ---------------- Recintos (listado completo) ----------------
+    @Query("SELECT * FROM recinto ORDER BY nombre")
+    abstract fun observarRecintos(): Flow<List<Recinto>>
+
+    // ---------------- Rutas del usuario ----------------
+    @Query("SELECT * FROM ruta WHERE usuarioId = :usuarioId ORDER BY id DESC")
+    abstract fun observarRutas(usuarioId: Int): Flow<List<Ruta>>
+
+    // Solo devuelve la ruta si pertenece al usuario
+    @Query("SELECT * FROM ruta WHERE id = :id AND usuarioId = :usuarioId")
+    abstract suspend fun obtenerRuta(id: Int, usuarioId: Int): Ruta?
+
+    // Recintos de la ruta en el orden de las paradas
+    @Query(
+        """SELECT r.* FROM recinto r INNER JOIN ruta_parada p ON p.recintoId = r.id
+           WHERE p.rutaId = :rutaId ORDER BY p.orden"""
+    )
+    abstract suspend fun paradasDeRuta(rutaId: Int): List<Recinto>
+
+    @Insert
+    abstract suspend fun insertarRuta(ruta: Ruta): Long
+
+    @Insert
+    abstract suspend fun insertarParadas(paradas: List<RutaParada>)
+
+    @Query("DELETE FROM ruta WHERE id = :id AND usuarioId = :usuarioId")
+    abstract suspend fun eliminarRuta(id: Int, usuarioId: Int): Int
+
+    @Query("DELETE FROM ruta_parada WHERE rutaId = :rutaId")
+    abstract suspend fun eliminarParadas(rutaId: Int)
+
+    /** Crea la ruta y sus paradas en una sola transacción (o se guarda todo, o nada). */
+    @Transaction
+    open suspend fun crearRuta(ruta: Ruta, recintoIds: List<Int>): Long {
+        val id = insertarRuta(ruta.copy(id = 0))
+        insertarParadas(recintoIds.mapIndexed { i, recintoId -> RutaParada(id.toInt(), i + 1, recintoId) })
+        return id
+    }
+
+    @Transaction
+    open suspend fun eliminarRutaCompleta(id: Int, usuarioId: Int): Int {
+        val borradas = eliminarRuta(id, usuarioId)
+        if (borradas > 0) eliminarParadas(id)
+        return borradas
+    }
 }

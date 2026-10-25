@@ -6,6 +6,7 @@ import com.example.frontend.model.EstadosRecinto
 import com.example.frontend.model.EstadosVisita
 import com.example.frontend.model.Favorito
 import com.example.frontend.model.Horario
+import com.example.frontend.model.Ruta
 import com.example.frontend.util.FechasUtil
 import com.example.frontend.util.TIPOS_EVENTO
 import kotlin.coroutines.cancellation.CancellationException
@@ -33,7 +34,23 @@ class PatrimonioRepository(private val dao: PatrimonioDao) {
     fun idsFavoritos(usuarioId: Int) = dao.observarIdsFavoritos(usuarioId)
     fun visitas(usuarioId: Int) = dao.observarVisitas(usuarioId)
 
+    fun recintos() = dao.observarRecintos()
+    fun rutas(usuarioId: Int) = dao.observarRutas(usuarioId)
+    suspend fun obtenerRuta(id: Int, usuarioId: Int) = dao.obtenerRuta(id, usuarioId)
+    suspend fun paradasDeRuta(rutaId: Int) = dao.paradasDeRuta(rutaId)
+
     // ---- escrituras ----
+    suspend fun crearRuta(usuarioId: Int, nombre: String, recintoIds: List<Int>, duracionMin: Int): Result<Long> = intentar {
+        require(nombre.trim().length in 3..40) { "El nombre debe tener entre 3 y 40 caracteres" }
+        require(recintoIds.size in 2..8) { "Elige entre 2 y 8 recintos" }
+        require(recintoIds.distinct().size == recintoIds.size) { "Hay recintos repetidos" }
+        dao.crearRuta(Ruta(usuarioId = usuarioId, nombre = nombre.trim(), duracion = duracionMin), recintoIds)
+    }
+
+    suspend fun eliminarRuta(id: Int, usuarioId: Int): Result<Unit> = intentar {
+        check(dao.eliminarRutaCompleta(id, usuarioId) > 0) { "La ruta no existe" }
+    }
+
     suspend fun alternarFavorito(usuarioId: Int, recintoId: Int, esFavorito: Boolean): Result<Unit> = intentar {
         if (esFavorito) dao.quitarFavorito(usuarioId, recintoId) else dao.agregarFavorito(Favorito(usuarioId, recintoId))
         Unit
