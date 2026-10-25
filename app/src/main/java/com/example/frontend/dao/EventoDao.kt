@@ -2,9 +2,9 @@ package com.example.frontend.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room3.Insert
 import com.example.frontend.model.Evento
 import com.example.frontend.model.EventoConRecinto
 import kotlinx.coroutines.flow.Flow
