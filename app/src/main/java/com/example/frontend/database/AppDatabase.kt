@@ -8,6 +8,7 @@ import com.example.frontend.dao.EventoDao
 import com.example.frontend.dao.FavoritoDao
 import com.example.frontend.dao.GuiaDao
 import com.example.frontend.dao.HorarioDao
+import com.example.frontend.dao.PatrimonioDao
 import com.example.frontend.dao.RecintoDao
 import com.example.frontend.dao.RutaDao
 import com.example.frontend.dao.UsuarioDao
@@ -41,6 +42,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun guiaDao(): GuiaDao
     abstract fun visitaDao(): VisitaDao
     abstract fun rutaDao(): RutaDao
+    abstract fun patrimonioDao(): PatrimonioDao
 
     companion object {
         // Una sola instancia de la base de datos para toda la app (patrón Singleton)

@@ -1,16 +1,18 @@
 package com.example.frontend.dao
 
+
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import androidx.room3.Insert
 import com.example.frontend.model.Evento
 import com.example.frontend.model.EventoConRecinto
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EventoDao {
+
     @Insert
     suspend fun insertar(evento: Evento)
 
@@ -26,13 +28,13 @@ interface EventoDao {
     // Todos los eventos con el nombre de su recinto (JOIN)
     @Query(
         "SELECT e.id, e.recintoId, r.nombre AS recintoNombre, e.titulo, e.descripcion, e.tipo, e.fecha, e.hora " +
-        "FROM evento e INNER JOIN recinto r ON r.id = e.recintoId ORDER BY e.fecha, e.hora"
+                "FROM evento e INNER JOIN recinto r ON r.id = e.recintoId ORDER BY e.fecha, e.hora"
     )
     fun listarConRecinto(): Flow<List<EventoConRecinto>>
 
     @Query(
         "SELECT e.id, e.recintoId, r.nombre AS recintoNombre, e.titulo, e.descripcion, e.tipo, e.fecha, e.hora " +
-        "FROM evento e INNER JOIN recinto r ON r.id = e.recintoId WHERE e.id = :id"
+                "FROM evento e INNER JOIN recinto r ON r.id = e.recintoId WHERE e.id = :id"
     )
     fun buscarConRecinto(id: Int): Flow<EventoConRecinto?>
 
