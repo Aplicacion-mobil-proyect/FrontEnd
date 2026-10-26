@@ -31,6 +31,7 @@ object Rutas {
     const val ENC_EVENTOS = "enc_eventos"
     const val ENC_EVENTO_FORM = "enc_evento/{eventoId}"     // eventoId = 0 significa "crear nuevo"
     const val ENC_GUIAS = "enc_guias"
+    const val ENC_HORARIOS_ESPECIALES = "enc_horarios_especiales"
 
     fun ficha(recintoId: Int) = "ficha/$recintoId"
     fun eventoDetalle(eventoId: Int) = "evento/$eventoId"

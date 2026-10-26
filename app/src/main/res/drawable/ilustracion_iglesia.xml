@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ilustración genérica para recintos tipo Iglesia / Parroquia (un campanario) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp" android:height="200dp"
+    android:viewportWidth="360" android:viewportHeight="200">
+    <path android:fillColor="#6A1222" android:pathData="M0,0h360v200h-360z"/>
+    <path android:fillColor="#8A2A3A" android:pathData="M70,50m-16,0a16,16 0,1 1,32 0a16,16 0,1 1,-32 0"/>
+    <path android:fillColor="#4E0C18" android:pathData="M0,170h360v30h-360z"/>
+    <path android:fillColor="#E6C276" android:pathData="M120,110h120v60h-120z M112,110L180,82L248,110z"/>
+    <path android:fillColor="#E6C276" android:pathData="M164,55h32v40h-32z M164,55L180,28L196,55z"/>
+    <path android:fillColor="#E6C276" android:pathData="M178,12h4v18h-4z M172,18h16v4h-16z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M174,64h12v16h-12z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M168,170v-28a12,12 0,0 1,24 0v28z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M134,125h14v22h-14z M212,125h14v22h-14z"/>
+</vector>

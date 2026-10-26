@@ -18,6 +18,7 @@ import com.example.frontend.view.EventosScreen
 import com.example.frontend.view.FavoritosScreen
 import com.example.frontend.view.FichaScreen
 import com.example.frontend.view.GuiasScreen
+import com.example.frontend.view.HorariosEspecialesScreen
 import com.example.frontend.view.GestionEventosScreen
 import com.example.frontend.view.IniciarRutaScreen
 import com.example.frontend.view.HomeScreen
@@ -115,5 +116,6 @@ fun AppNavigation() {
         ) { EventoFormScreen(navController) }
 
         composable(Rutas.ENC_GUIAS) { GuiasScreen(navController) }
+        composable(Rutas.ENC_HORARIOS_ESPECIALES) { HorariosEspecialesScreen(navController) }
     }
 }

@@ -16,3 +16,6 @@ local.properties
 
 # Archivos temporales de Kotlin (no se suben)
 .kotlin
+
+# Archivos temporales de revision
+revision.zip

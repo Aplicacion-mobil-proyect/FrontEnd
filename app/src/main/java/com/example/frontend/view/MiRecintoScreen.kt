@@ -69,6 +69,9 @@ fun MiRecintoScreen(navController: NavController, vm: MiRecintoViewModel = viewM
                 OutlinedButton(onClick = { navController.navigate(Rutas.ENC_HORARIOS) }, modifier = Modifier.fillMaxWidth()) {
                     Text("Editar horarios")
                 }
+                OutlinedButton(onClick = { navController.navigate(Rutas.ENC_HORARIOS_ESPECIALES) }, modifier = Modifier.fillMaxWidth()) {
+                    Text("Horarios especiales")
+                }
                 OutlinedButton(onClick = { navController.navigate(Rutas.ENC_EVENTOS) }, modifier = Modifier.fillMaxWidth()) {
                     Text("Gestionar eventos")
                 }

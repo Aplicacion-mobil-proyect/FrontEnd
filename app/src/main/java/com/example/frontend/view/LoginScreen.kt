@@ -38,7 +38,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
+import com.example.frontend.model.Roles
 import com.example.frontend.navigation.Rutas
+import com.example.frontend.session.Sesion
 import com.example.frontend.viewmodel.LoginViewModel
 
 @Composable
@@ -48,10 +51,14 @@ fun LoginScreen(
 ) {
     var verPassword by remember { mutableStateOf(false) }
 
-    // Cuando el login es exitoso, va a Home y borra el login del historial
+    val context = LocalContext.current
+
+    // Cuando el login es exitoso: el encargado va a "Mi recinto" y los demás a Home.
+    // popUpTo borra el login del historial para que "atrás" no vuelva a él.
     LaunchedEffect(loginViewModel.loginExitoso) {
         if (loginViewModel.loginExitoso) {
-            navController.navigate(Rutas.HOME) {
+            val destino = if (Sesion.obtener(context)?.rol == Roles.ENCARGADO) Rutas.ENC_MI_RECINTO else Rutas.HOME
+            navController.navigate(destino) {
                 popUpTo(Rutas.LOGIN) { inclusive = true }
             }
         }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ilustración genérica para recintos tipo Basílica / Santuario (cúpula) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp" android:height="200dp"
+    android:viewportWidth="360" android:viewportHeight="200">
+    <path android:fillColor="#6A1222" android:pathData="M0,0h360v200h-360z"/>
+    <path android:fillColor="#8A2A3A" android:pathData="M295,48m-16,0a16,16 0,1 1,32 0a16,16 0,1 1,-32 0"/>
+    <path android:fillColor="#4E0C18" android:pathData="M0,170h360v30h-360z"/>
+    <path android:fillColor="#E6C276" android:pathData="M105,112h150v58h-150z"/>
+    <path android:fillColor="#E6C276" android:pathData="M145,92h70v20h-70z"/>
+    <path android:fillColor="#E6C276" android:pathData="M145,92a35,35 0,0 1,70 0z"/>
+    <path android:fillColor="#E6C276" android:pathData="M175,48h10v12h-10z M178,32h4v16h-4z M173,37h14v4h-14z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M118,122h8v40h-8z M140,122h8v40h-8z M212,122h8v40h-8z M234,122h8v40h-8z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M167,170v-32a13,13 0,0 1,26 0v32z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M156,97h8v10h-8z M176,97h8v10h-8z M196,97h8v10h-8z"/>
+</vector>

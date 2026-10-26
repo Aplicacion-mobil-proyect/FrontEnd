@@ -29,7 +29,7 @@ import com.example.frontend.model.Visita
         Usuario::class, Recinto::class, Horario::class, Evento::class, Favorito::class,
         Guia::class, DisponibilidadGuia::class, Visita::class, Ruta::class, RutaParada::class
     ],
-    version = 1,
+    version = 2,      // subir este número cuando cambien las entidades o los datos de SeedData
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

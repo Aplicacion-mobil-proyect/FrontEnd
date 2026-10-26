@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ilustración genérica para recintos tipo Catedral (fachada con dos torres) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp" android:height="200dp"
+    android:viewportWidth="360" android:viewportHeight="200">
+    <path android:fillColor="#6A1222" android:pathData="M0,0h360v200h-360z"/>
+    <path android:fillColor="#8A2A3A" android:pathData="M300,45m-18,0a18,18 0,1 1,36 0a18,18 0,1 1,-36 0"/>
+    <path android:fillColor="#4E0C18" android:pathData="M0,170h360v30h-360z"/>
+    <path android:fillColor="#E6C276" android:pathData="M110,70h40v100h-40z M110,70L130,38L150,70z"/>
+    <path android:fillColor="#E6C276" android:pathData="M210,70h40v100h-40z M210,70L230,38L250,70z"/>
+    <path android:fillColor="#E6C276" android:pathData="M150,100h60v70h-60z M145,100L180,74L215,100z"/>
+    <path android:fillColor="#E6C276" android:pathData="M178,52h4v20h-4z M172,58h16v4h-16z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M124,88h12v20h-12z M224,88h12v20h-12z M124,125h12v20h-12z M224,125h12v20h-12z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M168,170v-30a12,12 0,0 1,24 0v30z"/>
+    <path android:fillColor="#7A5C14" android:pathData="M180,112m-7,0a7,7 0,1 1,14 0a7,7 0,1 1,-14 0"/>
+</vector>
