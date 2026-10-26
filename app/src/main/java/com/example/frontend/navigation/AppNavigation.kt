@@ -1,5 +1,7 @@
 package com.example.frontend.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,6 +17,7 @@ import com.example.frontend.view.EventoFormScreen
 import com.example.frontend.view.EventosScreen
 import com.example.frontend.view.FavoritosScreen
 import com.example.frontend.view.FichaScreen
+import com.example.frontend.view.GuiasScreen
 import com.example.frontend.view.GestionEventosScreen
 import com.example.frontend.view.IniciarRutaScreen
 import com.example.frontend.view.HomeScreen
@@ -24,17 +27,38 @@ import com.example.frontend.view.MisRutasScreen
 import com.example.frontend.view.MisVisitasScreen
 import com.example.frontend.view.LoginScreen
 import com.example.frontend.view.PerfilScreen
+import com.example.frontend.view.PlanificarVisitaScreen
 import com.example.frontend.view.QrScreen
 import com.example.frontend.view.RegistroScreen
 import com.example.frontend.view.SplashScreen
 import com.example.frontend.view.components.EnConstruccion
+
+// Duración de la animación entre pantallas, en milisegundos
+private const val DURACION_ANIMACION = 350
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
 
     // Siempre arranca en el Splash: él decide si va a Login, Home o Mi recinto según la sesión guardada
-    NavHost(navController = navController, startDestination = Rutas.SPLASH) {
+    NavHost(
+        navController = navController,
+        startDestination = Rutas.SPLASH,
+        // Animación tipo "pasar página": la pantalla nueva entra desde la derecha
+        // y la anterior se desplaza hacia la izquierda. Al volver, al revés.
+        enterTransition = {
+            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(DURACION_ANIMACION))
+        },
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(DURACION_ANIMACION))
+        },
+        popEnterTransition = {
+            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(DURACION_ANIMACION))
+        },
+        popExitTransition = {
+            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(DURACION_ANIMACION))
+        }
+    ) {
 
         // ----- Acceso -----
         composable(Rutas.SPLASH) { SplashScreen(navController) }
@@ -66,7 +90,10 @@ fun AppNavigation() {
         composable(
             route = Rutas.PLANIFICAR_VISITA,
             arguments = listOf(navArgument("recintoId") { type = NavType.IntType })
-        ) { EnConstruccion("Planificar visita", navController) }                         // Taylor
+        ) { backStackEntry ->
+            val recintoId = backStackEntry.arguments?.getInt("recintoId") ?: 0
+            PlanificarVisitaScreen(navController, recintoId)
+        }
 
         composable(Rutas.MIS_RUTAS) { MisRutasScreen(navController) }
         composable(Rutas.CREAR_RUTA) { CrearRutaScreen(navController) }
@@ -87,6 +114,6 @@ fun AppNavigation() {
             arguments = listOf(navArgument("eventoId") { type = NavType.IntType })
         ) { EventoFormScreen(navController) }
 
-        composable(Rutas.ENC_GUIAS) { EnConstruccion("Disponibilidad de guías", navController) } // Taylor
+        composable(Rutas.ENC_GUIAS) { GuiasScreen(navController) }
     }
 }

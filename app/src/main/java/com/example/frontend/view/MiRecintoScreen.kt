@@ -72,6 +72,9 @@ fun MiRecintoScreen(navController: NavController, vm: MiRecintoViewModel = viewM
                 OutlinedButton(onClick = { navController.navigate(Rutas.ENC_EVENTOS) }, modifier = Modifier.fillMaxWidth()) {
                     Text("Gestionar eventos")
                 }
+                OutlinedButton(onClick = { navController.navigate(Rutas.ENC_GUIAS) }, modifier = Modifier.fillMaxWidth()) {
+                    Text("Disponibilidad de guías")
+                }
             }
         }
     }
