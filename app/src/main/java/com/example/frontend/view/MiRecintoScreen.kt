@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import androidx.compose.foundation.layout.aspectRatio
+import com.example.frontend.view.components.ImagenRecinto
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,6 +55,7 @@ fun MiRecintoScreen(navController: NavController, vm: MiRecintoViewModel = viewM
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                ImagenRecinto(r.id, r.nombre, Modifier.fillMaxWidth().aspectRatio(16f / 9f))
                 Text(r.nombre, style = MaterialTheme.typography.headlineSmall)
                 Text("${r.tipo} · ${r.comuna}", style = MaterialTheme.typography.bodyMedium)
                 Text(r.direccion, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -69,14 +72,8 @@ fun MiRecintoScreen(navController: NavController, vm: MiRecintoViewModel = viewM
                 OutlinedButton(onClick = { navController.navigate(Rutas.ENC_HORARIOS) }, modifier = Modifier.fillMaxWidth()) {
                     Text("Editar horarios")
                 }
-                OutlinedButton(onClick = { navController.navigate(Rutas.ENC_HORARIOS_ESPECIALES) }, modifier = Modifier.fillMaxWidth()) {
-                    Text("Horarios especiales")
-                }
                 OutlinedButton(onClick = { navController.navigate(Rutas.ENC_EVENTOS) }, modifier = Modifier.fillMaxWidth()) {
                     Text("Gestionar eventos")
-                }
-                OutlinedButton(onClick = { navController.navigate(Rutas.ENC_GUIAS) }, modifier = Modifier.fillMaxWidth()) {
-                    Text("Disponibilidad de guías")
                 }
             }
         }

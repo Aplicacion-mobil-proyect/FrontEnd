@@ -9,6 +9,7 @@ import androidx.room.Update
 import com.example.frontend.model.Evento
 import com.example.frontend.model.EventoConRecinto
 import com.example.frontend.model.Favorito
+import com.example.frontend.model.Guia
 import com.example.frontend.model.Horario
 import com.example.frontend.model.Recinto
 import com.example.frontend.model.Ruta
@@ -165,5 +166,46 @@ abstract class PatrimonioDao {
         val borradas = eliminarRuta(id, usuarioId)
         if (borradas > 0) eliminarParadas(id)
         return borradas
+    }
+
+    // ---------------- Planificar visita ----------------
+    // Guías que atienden ese recinto ese día y cuyo bloque incluye la hora pedida ("HH:mm" se compara como texto)
+    @Query(
+        """SELECT g.* FROM guia g INNER JOIN disponibilidad_guia d ON d.guiaId = g.id
+           WHERE d.recintoId = :recintoId AND d.dia = :dia AND d.inicio <= :hora AND d.fin > :hora
+           GROUP BY g.id ORDER BY g.nombre"""
+    )
+    abstract suspend fun guiasEnRecinto(recintoId: Int, dia: Int, hora: String): List<Guia>
+
+    // Guías que ya tienen una visita agendada en esa fecha y hora
+    @Query("SELECT guiaId FROM visita WHERE fecha = :fecha AND hora = :hora AND guiaId IS NOT NULL AND estado = 'AGENDADA'")
+    abstract suspend fun guiasOcupados(fecha: String, hora: String): List<Int>
+
+    @Query(
+        """SELECT COUNT(*) FROM visita WHERE usuarioId = :usuarioId AND recintoId = :recintoId
+           AND fecha = :fecha AND hora = :hora AND estado = 'AGENDADA'"""
+    )
+    abstract suspend fun contarVisitasIguales(usuarioId: Int, recintoId: Int, fecha: String, hora: String): Int
+
+    @Insert
+    abstract suspend fun insertarVisita(visita: Visita): Long
+
+    /**
+     * Agenda la visita volviendo a comprobar todo dentro de una transacción
+     * (por si el guía se ocupó o el usuario ya agendó lo mismo mientras llenaba el formulario).
+     * Si algo falla se lanza una excepción y no se guarda nada.
+     */
+    @Transaction
+    open suspend fun agendarVisitaSegura(visita: Visita): Long {
+        check(contarVisitasIguales(visita.usuarioId, visita.recintoId, visita.fecha, visita.hora) == 0) {
+            "Ya tienes una visita agendada en ese recinto, fecha y hora"
+        }
+        if (visita.conGuia) {
+            val guiaId = visita.guiaId
+            check(guiaId != null && guiaId !in guiasOcupados(visita.fecha, visita.hora)) {
+                "El guía seleccionado ya no está disponible en ese horario"
+            }
+        }
+        return insertarVisita(visita)
     }
 }

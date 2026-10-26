@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import androidx.compose.foundation.layout.size
+import com.example.frontend.view.components.ImagenRecinto
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -67,6 +69,7 @@ fun IniciarRutaScreen(navController: NavController, vm: IniciarRutaViewModel = v
                             Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Checkbox(checked = visitada, onCheckedChange = { vm.alternarVisitada(r.id) })
+                                    ImagenRecinto(r.id, r.nombre, Modifier.padding(end = 8.dp).size(56.dp))
                                     Column(Modifier.weight(1f)) {
                                         Text("${i + 1}. ${r.nombre}", style = MaterialTheme.typography.titleSmall)
                                         Text("${r.comuna} · ${r.duracionVisita} min", style = MaterialTheme.typography.bodySmall,

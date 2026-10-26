@@ -5,7 +5,9 @@ import com.example.frontend.model.Evento
 import com.example.frontend.model.EstadosRecinto
 import com.example.frontend.model.EstadosVisita
 import com.example.frontend.model.Favorito
+import com.example.frontend.model.Guia
 import com.example.frontend.model.Horario
+import com.example.frontend.model.Visita
 import com.example.frontend.model.Ruta
 import com.example.frontend.util.FechasUtil
 import com.example.frontend.util.TIPOS_EVENTO
@@ -39,7 +41,21 @@ class PatrimonioRepository(private val dao: PatrimonioDao) {
     suspend fun obtenerRuta(id: Int, usuarioId: Int) = dao.obtenerRuta(id, usuarioId)
     suspend fun paradasDeRuta(rutaId: Int) = dao.paradasDeRuta(rutaId)
 
+    /** Guías que atienden el recinto ese día/hora y que no tienen otra visita a la misma fecha y hora. */
+    suspend fun guiasDisponibles(recintoId: Int, fecha: String, dia: Int, hora: String): List<Guia> {
+        val ocupados = dao.guiasOcupados(fecha, hora).toSet()
+        return dao.guiasEnRecinto(recintoId, dia, hora).filter { it.id !in ocupados }
+    }
+
     // ---- escrituras ----
+    suspend fun agendarVisita(visita: Visita): Result<Long> = intentar {
+        require(visita.personas in 1..100) { "La cantidad de personas no es válida" }
+        require(FechasUtil.horaValida(visita.hora)) { "Hora no válida" }
+        require(visita.fecha >= FechasUtil.hoyIso()) { "La fecha no puede ser anterior a hoy" }
+        require(!visita.conGuia || visita.guiaId != null) { "Selecciona un guía" }
+        dao.agendarVisitaSegura(visita.copy(id = 0, estado = EstadosVisita.AGENDADA, guiaId = if (visita.conGuia) visita.guiaId else null))
+    }
+
     suspend fun crearRuta(usuarioId: Int, nombre: String, recintoIds: List<Int>, duracionMin: Int): Result<Long> = intentar {
         require(nombre.trim().length in 3..40) { "El nombre debe tener entre 3 y 40 caracteres" }
         require(recintoIds.size in 2..8) { "Elige entre 2 y 8 recintos" }

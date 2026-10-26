@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import androidx.compose.foundation.layout.aspectRatio
+import com.example.frontend.view.components.ImagenRecinto
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -35,7 +37,6 @@ import androidx.navigation.NavController
 import com.example.frontend.model.EstadosRecinto
 import com.example.frontend.navigation.Destinos
 import com.example.frontend.util.FechasUtil
-import com.example.frontend.view.components.ImagenRecinto
 import com.example.frontend.view.components.PatEstadoChip
 import com.example.frontend.view.components.PatHorarios
 import com.example.frontend.view.components.PatMensajes
@@ -76,7 +77,7 @@ fun FichaScreen(navController: NavController, vm: FichaViewModel = viewModel()) 
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                ImagenRecinto(r)
+                ImagenRecinto(r.id, r.nombre, Modifier.fillMaxWidth().aspectRatio(4f / 3f))
                 Text(r.nombre, style = MaterialTheme.typography.headlineSmall)
                 Text("${r.tipo} · ${r.comuna}", style = MaterialTheme.typography.bodyLarge)
                 PatEstadoChip(r.estado)

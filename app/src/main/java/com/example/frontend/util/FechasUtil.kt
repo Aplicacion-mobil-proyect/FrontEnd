@@ -2,6 +2,7 @@ package com.example.frontend.util
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -48,6 +49,25 @@ object FechasUtil {
         val d = fmt("yyyy-MM-dd HH:mm").parse("$iso $hora")
         d != null && d.before(Date())
     } catch (e: ParseException) { false }
+
+    /** Día de la semana de una fecha ISO: 1 = lunes ... 7 = domingo (igual que Horario.dia). */
+    fun diaSemanaIso(iso: String): Int {
+        val d = fmt("yyyy-MM-dd").parse(iso) ?: return 1
+        val dow = Calendar.getInstance().apply { time = d }.get(Calendar.DAY_OF_WEEK) // domingo = 1
+        return (dow + 5) % 7 + 1
+    }
+
+    /** Fecha ISO de hoy + n días. */
+    fun isoMasDias(dias: Int): String {
+        val c = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, dias) }
+        return fmt("yyyy-MM-dd").format(c.time)
+    }
+
+    /** "09:30" -> 570 */
+    fun minutos(hora: String): Int = hora.substring(0, 2).toInt() * 60 + hora.substring(3, 5).toInt()
+
+    /** 570 -> "09:30" */
+    fun horaDesdeMinutos(min: Int): String = "%02d:%02d".format(min / 60, min % 60)
 
     fun nombreDia(dia: Int) = when (dia) {
         1 -> "Lunes"; 2 -> "Martes"; 3 -> "Miércoles"; 4 -> "Jueves"

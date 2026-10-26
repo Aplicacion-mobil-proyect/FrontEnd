@@ -91,9 +91,9 @@ fun AppNavigation() {
         composable(
             route = Rutas.PLANIFICAR_VISITA,
             arguments = listOf(navArgument("recintoId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val recintoId = backStackEntry.arguments?.getInt("recintoId") ?: 0
-            PlanificarVisitaScreen(navController, recintoId)
+        ) {
+            // El recintoId lo lee el propio ViewModel desde los argumentos de la ruta
+            PlanificarVisitaScreen(navController)
         }
 
         composable(Rutas.MIS_RUTAS) { MisRutasScreen(navController) }

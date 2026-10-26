@@ -1,5 +1,9 @@
 package com.example.frontend.view
 
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import com.example.frontend.view.components.ImagenRecinto
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -85,6 +89,8 @@ fun CercanosScreen(navController: NavController, vm: CercanosViewModel = viewMod
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                                ImagenRecinto(c.recinto.id, c.recinto.nombre, Modifier.size(72.dp))
+                                Spacer(Modifier.width(12.dp))
                                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Text(c.recinto.nombre, style = MaterialTheme.typography.titleMedium)
                                     Text("${c.recinto.tipo} · ${c.recinto.comuna}", style = MaterialTheme.typography.bodySmall,

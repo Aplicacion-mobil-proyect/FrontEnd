@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
+import com.example.frontend.view.components.ImagenRecinto
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -55,6 +58,8 @@ fun FavoritosScreen(navController: NavController, vm: FavoritosViewModel = viewM
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                                ImagenRecinto(r.id, r.nombre, Modifier.size(72.dp))
+                                Spacer(Modifier.width(12.dp))
                                 Column(Modifier.weight(1f)) {
                                     Text(r.nombre, style = MaterialTheme.typography.titleMedium)
                                     Text("${r.tipo} · ${r.comuna}", style = MaterialTheme.typography.bodyMedium,

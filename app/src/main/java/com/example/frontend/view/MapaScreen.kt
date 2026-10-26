@@ -1,5 +1,6 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.ImagenRecinto
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,10 +45,10 @@ import com.example.frontend.viewmodel.MapaViewModel
 import kotlin.math.hypot
 
 // Área que cubre el mapa esquemático: centro de Santiago, Recoleta y Providencia
-private const val LAT_MIN = -33.455
+private const val LAT_MIN = -33.460
 private const val LAT_MAX = -33.418
 private const val LNG_MIN = -70.670
-private const val LNG_MAX = -70.622
+private const val LNG_MAX = -70.612
 
 private fun Recinto.dentroDelMapa() = latitud in LAT_MIN..LAT_MAX && longitud in LNG_MIN..LNG_MAX
 
@@ -89,6 +90,7 @@ fun MapaScreen(navController: NavController, vm: MapaViewModel = viewModel()) {
                 seleccionado?.let { r ->
                     Card(Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            ImagenRecinto(r.id, r.nombre, Modifier.fillMaxWidth().aspectRatio(16f / 9f))
                             Text(r.nombre, style = MaterialTheme.typography.titleMedium)
                             Text("${r.tipo} · ${r.comuna}", style = MaterialTheme.typography.bodyMedium)
                             PatEstadoChip(r.estado)

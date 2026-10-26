@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import androidx.compose.foundation.layout.aspectRatio
+import com.example.frontend.view.components.ImagenRecinto
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,6 +63,7 @@ fun EventoDetalleScreen(navController: NavController, vm: EventoDetalleViewModel
                 Modifier.padding(20.dp).verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                ImagenRecinto(e.recintoId, e.recintoNombre, Modifier.fillMaxWidth().aspectRatio(16f / 9f))
                 Text(e.tipo, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 Text(e.titulo, style = MaterialTheme.typography.headlineSmall)
                 Text("Lugar: ${e.recintoNombre}", style = MaterialTheme.typography.bodyLarge)
