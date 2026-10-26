@@ -15,7 +15,6 @@ room = "2.8.5"
 ksp = "2.3.6"
 materialIconsExtended = "1.7.8"
 googleCodeScanner = "16.1.0"
-room3Common = "3.0.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,7 +40,6 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 google-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "googleCodeScanner" }
-androidx-room3-common = { group = "androidx.room3", name = "room3-common", version.ref = "room3Common" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

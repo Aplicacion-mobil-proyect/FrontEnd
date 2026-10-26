@@ -1,7 +1,7 @@
 package com.example.frontend.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -19,7 +19,11 @@ private val LightColorScheme = lightColorScheme(
     onSecondaryContainer = DoradoOscuroContenedor,
     tertiary = Piedra,
     background = FondoClaro,
-    surface = FondoClaro
+    onBackground = TextoPrincipal,
+    surface = FondoClaro,
+    onSurface = TextoPrincipal,
+    onSurfaceVariant = TextoSecundario,   // textos secundarios y etiquetas de los campos
+    outline = Borde                       // borde de los OutlinedTextField
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -37,19 +41,22 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 /**
- * Tema de la app. No usa colores dinámicos (los del fondo de pantalla del celular)
- * para mantener la identidad visual del Arzobispado en todos los dispositivos.
+ * Tema de la app. Siempre usa la paleta clara (aunque el celular esté en modo oscuro)
+ * y no usa colores dinámicos, para mantener la identidad visual del Arzobispado.
+ * Si algún día quieren modo oscuro, cambien darkTheme a isSystemInDarkTheme().
  */
 @Composable
 fun FrontEndTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
         colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
-        typography = Typography,
-        content = content
-    )
+        typography = Typography
+    ) {
+        // Surface pinta el fondo y le da a los textos el color "onSurface" por defecto
+        Surface(color = MaterialTheme.colorScheme.background, content = content)
+    }
 }
 
 /** Color asociado a cada estado de recinto. Úsenlo en mapa, ficha y pantallas de encargado. */
