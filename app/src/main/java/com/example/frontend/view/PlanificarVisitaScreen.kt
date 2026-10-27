@@ -33,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.frontend.navigation.Rutas
 import com.example.frontend.view.components.PatCampo
+import com.example.frontend.view.components.PatCampoFecha
 import com.example.frontend.view.components.PatEstadoChip
 import com.example.frontend.view.components.PatHorarios
 import com.example.frontend.view.components.PatMensajes
@@ -74,7 +75,13 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
 
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
-                PatCampo(vm.fecha, vm::cambiarFecha, "Fecha", vm.errorFecha, teclado = KeyboardType.Number, placeholder = "dd/mm/aaaa")
+                PatCampoFecha(
+                    valor = vm.fecha,
+                    error = vm.errorFecha,
+                    diasAtencion = data.horarios.filter { !it.especial }.map { it.dia }.toSet(),
+                    maxDiasAnticipacion = PlanificarVisitaViewModel.MAX_DIAS_ANTICIPACION,
+                    onFechaElegida = vm::cambiarFecha
+                )
                 PatCampo(vm.hora, vm::cambiarHora, "Hora de llegada", vm.errorHora, placeholder = "HH:mm")
                 PatCampo(
                     vm.personas, vm::cambiarPersonas,
