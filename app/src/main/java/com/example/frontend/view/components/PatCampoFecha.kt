@@ -1,5 +1,7 @@
 package com.example.frontend.view.components
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +43,7 @@ fun PatCampoFecha(
     maxDiasAnticipacion: Int,
     onFechaElegida: (String) -> Unit,
     modifier: Modifier = Modifier,
-    etiqueta: String = "Fecha"
+    etiqueta: String = stringResource(R.string.fecha)
 ) {
     var mostrar by remember { mutableStateOf(false) }
 
@@ -57,10 +59,10 @@ fun PatCampoFecha(
         readOnly = true,
         interactionSource = interaccion,
         label = { Text(etiqueta) },
-        placeholder = { Text("Toca para elegir") },
+        placeholder = { Text(stringResource(R.string.toca_para_elegir)) },
         trailingIcon = {
             IconButton(onClick = { mostrar = true }) {
-                Icon(Icons.Filled.DateRange, contentDescription = "Elegir fecha")
+                Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.elegir_fecha))
             }
         },
         isError = error != null,
@@ -94,9 +96,9 @@ fun PatCampoFecha(
                         mostrar = false
                     },
                     enabled = estado.selectedDateMillis != null
-                ) { Text("Aceptar") }
+                ) { Text(stringResource(R.string.aceptar)) }
             },
-            dismissButton = { TextButton(onClick = { mostrar = false }) { Text("Cancelar") } }
+            dismissButton = { TextButton(onClick = { mostrar = false }) { Text(stringResource(R.string.cancelar)) } }
         ) {
             DatePicker(state = estado)
         }

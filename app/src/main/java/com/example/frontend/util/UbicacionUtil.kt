@@ -27,7 +27,7 @@ object UbicacionUtil {
     }
 
     fun formatear(km: Double): String =
-        if (km < 1) "${(km * 1000).roundToInt()} m" else String.format(Locale("es", "CL"), "%.1f km", km)
+        if (km < 1) "${(km * 1000).roundToInt()} m" else String.format(Locale.getDefault(), "%.1f km", km)
 
     /** Última ubicación conocida del teléfono. Solo llamar con el permiso ya concedido. */
     @SuppressLint("MissingPermission")

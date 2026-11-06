@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoEventoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,29 +42,29 @@ fun EventoFormScreen(navController: NavController, vm: EventoFormViewModel = vie
     }
 
     PatScaffold(
-        titulo = if (vm.esEdicion) "Editar evento" else "Nuevo evento",
+        titulo = if (vm.esEdicion) stringResource(R.string.editar_evento) else stringResource(R.string.nuevo_evento),
         snackbarHostState = snack,
         onVolver = { navController.popBackStack() }
     ) { padding ->
         when {
-            vm.cargando -> PatMensajeCentral("Cargando…", Modifier.padding(padding))
+            vm.cargando -> PatMensajeCentral(stringResource(R.string.cargando), Modifier.padding(padding))
             vm.errorCarga != null -> PatMensajeCentral(vm.errorCarga!!, Modifier.padding(padding), esError = true)
             else -> Column(
                 Modifier.padding(padding).padding(horizontal = 20.dp).verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                PatCampo(vm.titulo, vm::cambiarTitulo, "Título", vm.errorTitulo)
-                PatCampo(vm.descripcion, vm::cambiarDescripcion, "Descripción", vm.errorDescripcion, lineas = 4)
+                PatCampo(vm.titulo, vm::cambiarTitulo, stringResource(R.string.titulo), vm.errorTitulo)
+                PatCampo(vm.descripcion, vm::cambiarDescripcion, stringResource(R.string.descripcion), vm.errorDescripcion, lineas = 4)
 
-                Text("Tipo de evento", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 4.dp))
+                Text(stringResource(R.string.tipo_evento), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 4.dp))
                 Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     TIPOS_EVENTO.forEach { t ->
-                        FilterChip(selected = vm.tipo == t, onClick = { vm.tipo = t }, label = { Text(t) })
+                        FilterChip(selected = vm.tipo == t, onClick = { vm.tipo = t }, label = { Text(tipoEventoTexto(t)) })
                     }
                 }
 
-                PatCampo(vm.fecha, vm::cambiarFecha, "Fecha", vm.errorFecha, teclado = KeyboardType.Number, placeholder = "dd/mm/aaaa")
-                PatCampo(vm.hora, vm::cambiarHora, "Hora", vm.errorHora, placeholder = "HH:mm")
+                PatCampo(vm.fecha, vm::cambiarFecha, stringResource(R.string.fecha), vm.errorFecha, teclado = KeyboardType.Number, placeholder = stringResource(R.string.formato_fecha))
+                PatCampo(vm.hora, vm::cambiarHora, stringResource(R.string.hora), vm.errorHora, placeholder = "HH:mm")
 
                 Button(
                     onClick = { vm.guardar() },
@@ -69,7 +72,7 @@ fun EventoFormScreen(navController: NavController, vm: EventoFormViewModel = vie
                     modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
                 ) {
                     if (vm.guardando) CircularProgressIndicator(Modifier.padding(2.dp))
-                    else Text(if (vm.esEdicion) "Guardar cambios" else "Crear evento")
+                    else Text(if (vm.esEdicion) stringResource(R.string.guardar_cambios) else stringResource(R.string.crear_evento))
                 }
             }
         }

@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,10 +41,10 @@ fun MisVisitasScreen(navController: NavController, vm: MisVisitasViewModel = vie
     var porCancelar by remember { mutableStateOf<VisitaDetalle?>(null) }
     PatMensajes(vm.mensaje, snack, vm::mensajeMostrado)
 
-    PatScaffold("Mis visitas", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.mis_visitas), snack, onVolver = { navController.popBackStack() }) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { lista ->
             if (lista.isEmpty()) {
-                PatMensajeCentral("No tienes visitas agendadas.\nAgenda una desde la ficha de un recinto.")
+                PatMensajeCentral(stringResource(R.string.sin_visitas))
             } else {
                 LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     items(lista, key = { it.id }) { v ->
@@ -51,18 +53,18 @@ fun MisVisitasScreen(navController: NavController, vm: MisVisitasViewModel = vie
                             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text(v.recintoNombre, style = MaterialTheme.typography.titleMedium)
                                 Text("${FechasUtil.isoALegible(v.fecha)} · ${v.hora}", style = MaterialTheme.typography.bodyMedium)
-                                Text("${v.personas} persona(s)", style = MaterialTheme.typography.bodyMedium)
+                                Text(stringResource(R.string.personas_n, v.personas), style = MaterialTheme.typography.bodyMedium)
                                 Text(
-                                    if (v.conGuia) "Guía: ${v.guiaNombre ?: "por asignar"}" else "Sin guía",
+                                    if (v.conGuia) stringResource(R.string.guia_x, v.guiaNombre ?: stringResource(R.string.por_asignar)) else stringResource(R.string.sin_guia),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                                 Text(
-                                    if (cancelada) "Cancelada" else "Agendada",
+                                    if (cancelada) stringResource(R.string.cancelada) else stringResource(R.string.agendada),
                                     style = MaterialTheme.typography.labelLarge,
                                     color = if (cancelada) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                                 )
                                 if (!cancelada) {
-                                    OutlinedButton(onClick = { porCancelar = v }) { Text("Cancelar visita") }
+                                    OutlinedButton(onClick = { porCancelar = v }) { Text(stringResource(R.string.cancelar_visita)) }
                                 }
                             }
                         }
@@ -74,9 +76,9 @@ fun MisVisitasScreen(navController: NavController, vm: MisVisitasViewModel = vie
 
     porCancelar?.let { v ->
         PatConfirmDialog(
-            titulo = "Cancelar visita",
-            texto = "¿Cancelar tu visita a ${v.recintoNombre} el ${FechasUtil.isoALegible(v.fecha)}?",
-            textoConfirmar = "Sí, cancelar",
+            titulo = stringResource(R.string.cancelar_visita),
+            texto = stringResource(R.string.confirmar_cancelar_visita, v.recintoNombre, FechasUtil.isoALegible(v.fecha)),
+            textoConfirmar = stringResource(R.string.si_cancelar),
             onConfirmar = { vm.cancelar(v.id); porCancelar = null },
             onCancelar = { porCancelar = null }
         )

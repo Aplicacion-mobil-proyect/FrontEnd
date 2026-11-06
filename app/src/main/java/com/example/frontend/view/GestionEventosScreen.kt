@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoEventoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,18 +51,18 @@ fun GestionEventosScreen(navController: NavController, vm: GestionEventosViewMod
     PatMensajes(vm.mensaje, snack, vm::mensajeMostrado)
 
     PatScaffold(
-        titulo = "Eventos de mi recinto",
+        titulo = stringResource(R.string.eventos_mi_recinto),
         snackbarHostState = snack,
         onVolver = { navController.popBackStack() },
         fab = {
             FloatingActionButton(onClick = { navController.navigate(Destinos.eventoForm(0)) }) {
-                Icon(Icons.Filled.Add, contentDescription = "Crear evento")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.crear_evento))
             }
         }
     ) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { lista ->
             if (lista.isEmpty()) {
-                PatMensajeCentral("Aún no has creado eventos.\nToca + para crear el primero.")
+                PatMensajeCentral(stringResource(R.string.sin_eventos_creados))
             } else {
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp, 16.dp, 16.dp, 88.dp), // espacio para que el botón + no tape el último
@@ -69,15 +72,15 @@ fun GestionEventosScreen(navController: NavController, vm: GestionEventosViewMod
                         Card(Modifier.fillMaxWidth()) {
                             Row(Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Column(Modifier.weight(1f)) {
-                                    Text(e.tipo, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                                    Text(tipoEventoTexto(e.tipo), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
                                     Text(e.titulo, style = MaterialTheme.typography.titleMedium)
                                     Text("${FechasUtil.isoADdMmYyyy(e.fecha)} · ${e.hora}", style = MaterialTheme.typography.bodySmall)
                                 }
                                 IconButton(onClick = { navController.navigate(Destinos.eventoForm(e.id)) }) {
-                                    Icon(Icons.Filled.Edit, contentDescription = "Editar ${e.titulo}")
+                                    Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.editar_x, e.titulo))
                                 }
                                 IconButton(onClick = { porEliminar = e }) {
-                                    Icon(Icons.Filled.Delete, contentDescription = "Eliminar ${e.titulo}", tint = MaterialTheme.colorScheme.error)
+                                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.eliminar_x, e.titulo), tint = MaterialTheme.colorScheme.error)
                                 }
                             }
                         }
@@ -89,9 +92,9 @@ fun GestionEventosScreen(navController: NavController, vm: GestionEventosViewMod
 
     porEliminar?.let { e ->
         PatConfirmDialog(
-            titulo = "Eliminar evento",
-            texto = "¿Eliminar \"${e.titulo}\"? Esta acción no se puede deshacer.",
-            textoConfirmar = "Eliminar",
+            titulo = stringResource(R.string.eliminar_evento),
+            texto = stringResource(R.string.confirmar_eliminar_evento, e.titulo),
+            textoConfirmar = stringResource(R.string.eliminar),
             onConfirmar = { vm.eliminar(e.id); porEliminar = null },
             onCancelar = { porEliminar = null }
         )

@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.aspectRatio
 import com.example.frontend.view.components.ImagenRecinto
 import androidx.compose.foundation.layout.Arrangement
@@ -47,7 +49,7 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
     val snack = remember { SnackbarHostState() }
     PatMensajes(vm.mensaje, snack, vm::mensajeMostrado)
 
-    // Visita agendada: va a "Mis visitas" y saca este formulario del historial
+    // Visita agendada: va a stringResource(R.string.mis_visitas) y saca este formulario del historial
     LaunchedEffect(vm.agendada) {
         if (vm.agendada) {
             navController.navigate(Rutas.MIS_VISITAS) {
@@ -56,7 +58,7 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
         }
     }
 
-    PatScaffold("Planificar visita", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.planificar_visita), snack, onVolver = { navController.popBackStack() }) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { data ->
             val r = data.recinto
             Column(
@@ -67,10 +69,10 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
                 Text(r.nombre, style = MaterialTheme.typography.titleLarge)
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     PatEstadoChip(r.estado)
-                    Text("Visita de ${r.duracionVisita} min", style = MaterialTheme.typography.bodySmall)
+                    Text(stringResource(R.string.visita_de_min, r.duracionVisita), style = MaterialTheme.typography.bodySmall)
                 }
 
-                Text("Horario de atención", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
+                Text(stringResource(R.string.horario_atencion), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = 8.dp))
                 PatHorarios(data.horarios)
 
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
@@ -82,15 +84,15 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
                     maxDiasAnticipacion = PlanificarVisitaViewModel.MAX_DIAS_ANTICIPACION,
                     onFechaElegida = vm::cambiarFecha
                 )
-                PatCampo(vm.hora, vm::cambiarHora, "Hora de llegada", vm.errorHora, placeholder = "HH:mm")
+                PatCampo(vm.hora, vm::cambiarHora, stringResource(R.string.hora_llegada), vm.errorHora, placeholder = "HH:mm")
                 PatCampo(
                     vm.personas, vm::cambiarPersonas,
-                    "Cantidad de personas (${vm.minPersonas} a ${vm.maxPersonas})",
+                    stringResource(R.string.cantidad_personas, vm.minPersonas, vm.maxPersonas),
                     vm.errorPersonas, teclado = KeyboardType.Number
                 )
 
                 Row(Modifier.fillMaxWidth().padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("Quiero un guía", Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.quiero_guia), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
                     Switch(checked = vm.conGuia, onCheckedChange = { vm.cambiarConGuia(it) })
                 }
 
@@ -98,7 +100,7 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
                     when {
                         vm.buscandoGuias -> CircularProgressIndicator(Modifier.padding(8.dp))
                         vm.guias.isNotEmpty() -> Column(Modifier.selectableGroup()) {
-                            Text("Guías disponibles", style = MaterialTheme.typography.labelLarge)
+                            Text(stringResource(R.string.guias_disponibles), style = MaterialTheme.typography.labelLarge)
                             vm.guias.forEach { g ->
                                 Row(
                                     Modifier.fillMaxWidth()
@@ -115,7 +117,7 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
                             }
                         }
                         else -> Text(
-                            "Escribe una fecha y una hora válidas para ver los guías disponibles.",
+                            stringResource(R.string.esperando_fecha_hora),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -127,7 +129,7 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
                     enabled = !vm.guardando,
                     modifier = Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 8.dp)
                 ) {
-                    if (vm.guardando) CircularProgressIndicator(Modifier.padding(2.dp)) else Text("Agendar visita")
+                    if (vm.guardando) CircularProgressIndicator(Modifier.padding(2.dp)) else Text(stringResource(R.string.agendar_visita))
                 }
             }
         }

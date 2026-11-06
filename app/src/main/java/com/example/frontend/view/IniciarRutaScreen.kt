@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.size
 import com.example.frontend.view.components.ImagenRecinto
 import android.content.ActivityNotFoundException
@@ -42,7 +44,7 @@ fun IniciarRutaScreen(navController: NavController, vm: IniciarRutaViewModel = v
     val snack = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-    PatScaffold("Recorrido", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.recorrido), snack, onVolver = { navController.popBackStack() }) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { detalle ->
             val total = detalle.paradas.size
             val hechas = detalle.paradas.count { it.id in vm.visitadas }
@@ -51,13 +53,13 @@ fun IniciarRutaScreen(navController: NavController, vm: IniciarRutaViewModel = v
 
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(detalle.ruta.nombre, style = MaterialTheme.typography.headlineSmall)
-                Text("Duración estimada: ${formatearMinutos(detalle.ruta.duracion)}", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.duracion_estimada_x, formatearMinutos(detalle.ruta.duracion)), style = MaterialTheme.typography.bodyMedium)
                 LinearProgressIndicator(
                     progress = { if (total == 0) 0f else hechas.toFloat() / total },
                     modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
                 )
                 Text(
-                    if (siguiente == null && total > 0) "¡Recorrido completado!" else "$hechas de $total paradas visitadas",
+                    if (siguiente == null && total > 0) stringResource(R.string.recorrido_completado) else stringResource(R.string.paradas_visitadas, hechas, total),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -72,27 +74,27 @@ fun IniciarRutaScreen(navController: NavController, vm: IniciarRutaViewModel = v
                                     ImagenRecinto(r.id, r.nombre, Modifier.padding(end = 8.dp).size(56.dp))
                                     Column(Modifier.weight(1f)) {
                                         Text("${i + 1}. ${r.nombre}", style = MaterialTheme.typography.titleSmall)
-                                        Text("${r.comuna} · ${r.duracionVisita} min", style = MaterialTheme.typography.bodySmall,
+                                        Text(stringResource(R.string.comuna_duracion, r.comuna, r.duracionVisita), style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                     PatEstadoChip(r.estado)
                                 }
                                 Row {
-                                    TextButton(onClick = { navController.navigate(Destinos.ficha(r.id)) }) { Text("Ver ficha") }
+                                    TextButton(onClick = { navController.navigate(Destinos.ficha(r.id)) }) { Text(stringResource(R.string.ver_ficha)) }
                                     if (r.id == siguiente?.id) {
                                         TextButton(onClick = {
                                             val uri = Uri.parse("geo:${r.latitud},${r.longitud}?q=${r.latitud},${r.longitud}(${Uri.encode(r.nombre)})")
                                             try {
                                                 context.startActivity(Intent(Intent.ACTION_VIEW, uri))
                                             } catch (e: ActivityNotFoundException) { }
-                                        }) { Text("Cómo llegar") }
+                                        }) { Text(stringResource(R.string.como_llegar)) }
                                     }
                                 }
                             }
                         }
                     }
                 }
-                OutlinedButton(onClick = { navController.popBackStack() }, modifier = Modifier.fillMaxWidth()) { Text("Terminar") }
+                OutlinedButton(onClick = { navController.popBackStack() }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.terminar)) }
             }
         }
     }

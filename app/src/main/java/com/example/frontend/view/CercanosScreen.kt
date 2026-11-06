@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoRecintoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -52,12 +55,12 @@ fun CercanosScreen(navController: NavController, vm: CercanosViewModel = viewMod
         if (r.values.any { it }) vm.usarUbicacionReal() else vm.permisoDenegado()
     }
 
-    PatScaffold("Recintos cercanos", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.recintos_cercanos), snack, onVolver = { navController.popBackStack() }) { padding ->
         Column(Modifier.padding(padding)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    if (referencia.esUbicacionReal) "Distancias desde tu ubicación"
-                    else "Distancias desde la Plaza de Armas (centro de Santiago)",
+                    if (referencia.esUbicacionReal) stringResource(R.string.distancias_desde_ubicacion)
+                    else stringResource(R.string.distancias_desde_plaza),
                     style = MaterialTheme.typography.titleSmall
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -66,9 +69,9 @@ fun CercanosScreen(navController: NavController, vm: CercanosViewModel = viewMod
                             pedirPermiso.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
                         },
                         modifier = Modifier.weight(1f)
-                    ) { Text("Usar mi ubicación") }
+                    ) { Text(stringResource(R.string.usar_mi_ubicacion)) }
                     OutlinedButton(onClick = { vm.usarPlazaDeArmas() }, modifier = Modifier.weight(1f)) {
-                        Text("Plaza de Armas")
+                        Text(stringResource(R.string.plaza_de_armas))
                     }
                 }
             }
@@ -79,7 +82,7 @@ fun CercanosScreen(navController: NavController, vm: CercanosViewModel = viewMod
                 LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     if (lejos) item {
                         Text(
-                            "Tu ubicación parece estar lejos de Santiago (¿emulador?). Usa \"Plaza de Armas\" para ver las distancias reales.",
+                            stringResource(R.string.aviso_lejos),
                             color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall
                         )
                     }
@@ -93,7 +96,7 @@ fun CercanosScreen(navController: NavController, vm: CercanosViewModel = viewMod
                                 Spacer(Modifier.width(12.dp))
                                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Text(c.recinto.nombre, style = MaterialTheme.typography.titleMedium)
-                                    Text("${c.recinto.tipo} · ${c.recinto.comuna}", style = MaterialTheme.typography.bodySmall,
+                                    Text("${tipoRecintoTexto(c.recinto.tipo)} · ${c.recinto.comuna}", style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     PatEstadoChip(c.recinto.estado)
                                 }

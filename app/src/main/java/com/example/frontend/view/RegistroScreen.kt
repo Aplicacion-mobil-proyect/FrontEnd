@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,38 +70,38 @@ fun RegistroScreen(
             .padding(horizontal = 28.dp, vertical = 40.dp)
     ) {
         Text(
-            "Crear cuenta",
+            stringResource(R.string.crear_cuenta),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
         )
         Text(
-            "Red Patrimonial de Santiago",
+            stringResource(R.string.red_patrimonial_de_santiago),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        Campo(vm.nombre, vm::cambiarNombre, "Nombre completo", vm.errorNombre)
-        Campo(vm.email, vm::cambiarEmail, "Correo electrónico", vm.errorEmail, KeyboardType.Email)
+        Campo(vm.nombre, vm::cambiarNombre, stringResource(R.string.nombre_completo), vm.errorNombre)
+        Campo(vm.email, vm::cambiarEmail, stringResource(R.string.correo), vm.errorEmail, KeyboardType.Email)
         Campo(
-            vm.password, vm::cambiarPassword, "Contraseña", vm.errorPassword, KeyboardType.Password,
+            vm.password, vm::cambiarPassword, stringResource(R.string.contrasena), vm.errorPassword, KeyboardType.Password,
             oculto = !verPassword,
             trailing = {
                 IconButton(onClick = { verPassword = !verPassword }) {
                     Icon(
                         if (verPassword) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                        contentDescription = "Mostrar u ocultar contraseña"
+                        contentDescription = stringResource(R.string.mostrar_ocultar_contrasena)
                     )
                 }
             }
         )
-        Campo(vm.confirmar, vm::cambiarConfirmar, "Repetir contraseña", vm.errorConfirmar, KeyboardType.Password, oculto = !verPassword)
+        Campo(vm.confirmar, vm::cambiarConfirmar, stringResource(R.string.repetir_contrasena), vm.errorConfirmar, KeyboardType.Password, oculto = !verPassword)
 
-        Text("Tipo de cuenta", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 8.dp))
+        Text(stringResource(R.string.tipo_cuenta), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilterChip(selected = vm.rol == Roles.TURISTA, onClick = { vm.cambiarRol(Roles.TURISTA) }, label = { Text("Turista") })
-            FilterChip(selected = vm.rol == Roles.COLEGIO, onClick = { vm.cambiarRol(Roles.COLEGIO) }, label = { Text("Colegio") })
+            FilterChip(selected = vm.rol == Roles.TURISTA, onClick = { vm.cambiarRol(Roles.TURISTA) }, label = { Text(stringResource(R.string.rol_turista)) })
+            FilterChip(selected = vm.rol == Roles.COLEGIO, onClick = { vm.cambiarRol(Roles.COLEGIO) }, label = { Text(stringResource(R.string.rol_colegio)) })
         }
 
         vm.errorGeneral?.let {
@@ -114,11 +116,11 @@ fun RegistroScreen(
             if (vm.cargando) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(22.dp))
             } else {
-                Text("Registrarme")
+                Text(stringResource(R.string.registrarme))
             }
         }
         TextButton(onClick = { navController.popBackStack() }, modifier = Modifier.fillMaxWidth()) {
-            Text("¿Ya tienes cuenta? Inicia sesión")
+            Text(stringResource(R.string.tienes_cuenta))
         }
     }
 }

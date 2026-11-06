@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,8 +46,8 @@ fun SplashScreen(navController: NavController) {
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.primary) {
         Column(Modifier.fillMaxSize(), Arrangement.Center, Alignment.CenterHorizontally) {
             Icon(Icons.Filled.AccountBalance, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(72.dp))
-            Text("Red Patrimonial", style = MaterialTheme.typography.headlineLarge, color = MaterialTheme.colorScheme.onPrimary)
-            Text("de Santiago", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimary)
+            Text(stringResource(R.string.red_patrimonial), style = MaterialTheme.typography.headlineLarge, color = MaterialTheme.colorScheme.onPrimary)
+            Text(stringResource(R.string.de_santiago), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimary)
             Spacer(Modifier.height(32.dp))
             CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
         }

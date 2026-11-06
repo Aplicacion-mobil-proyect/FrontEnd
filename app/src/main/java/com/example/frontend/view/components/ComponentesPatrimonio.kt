@@ -1,5 +1,7 @@
 package com.example.frontend.view.components
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
@@ -33,7 +35,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.frontend.model.EstadosRecinto
-import com.example.frontend.util.etiquetaEstadoRecinto
 import com.example.frontend.viewmodel.UiState
 
 // Componentes compartidos por las pantallas de eventos, favoritos, visitas y encargado.
@@ -56,7 +57,7 @@ fun PatScaffold(
                 title = { Text(titulo) },
                 navigationIcon = {
                     if (onVolver != null) IconButton(onClick = onVolver) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.volver))
                     }
                 },
                 actions = acciones
@@ -132,7 +133,7 @@ fun PatConfirmDialog(
         title = { Text(titulo) },
         text = { Text(texto) },
         confirmButton = { TextButton(onClick = onConfirmar) { Text(textoConfirmar) } },
-        dismissButton = { TextButton(onClick = onCancelar) { Text("Cancelar") } }
+        dismissButton = { TextButton(onClick = onCancelar) { Text(stringResource(R.string.cancelar)) } }
     )
 }
 

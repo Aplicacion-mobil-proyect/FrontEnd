@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.SelectorIdiomaFila
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,10 +48,10 @@ fun PerfilScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Mi perfil") },
+                title = { Text(stringResource(R.string.mi_perfil)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.volver))
                     }
                 }
             )
@@ -60,26 +63,27 @@ fun PerfilScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (usuario == null) {
-                Text("No hay una sesión activa", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.sin_sesion), style = MaterialTheme.typography.bodyLarge)
                 Button(onClick = {
                     navController.navigate(Rutas.LOGIN) { popUpTo(navController.graph.id) { inclusive = true } }
-                }) { Text("Ir a iniciar sesión") }
+                }) { Text(stringResource(R.string.ir_a_login)) }
             } else {
                 Icon(Icons.Filled.AccountCircle, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(88.dp))
                 Text(usuario.nombre, style = MaterialTheme.typography.headlineSmall)
                 Text(usuario.email, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(
                     when (usuario.rol) {
-                        Roles.TURISTA -> "Turista"
-                        Roles.COLEGIO -> "Colegio"
-                        Roles.ENCARGADO -> "Encargado de recinto"
+                        Roles.TURISTA -> stringResource(R.string.rol_turista)
+                        Roles.COLEGIO -> stringResource(R.string.rol_colegio)
+                        Roles.ENCARGADO -> stringResource(R.string.rol_encargado)
                         else -> usuario.rol
                     },
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
+                SelectorIdiomaFila(Modifier.padding(top = 16.dp))
                 Button(onClick = { confirmar = true }, modifier = Modifier.fillMaxWidth().padding(top = 24.dp)) {
-                    Text("Cerrar sesión")
+                    Text(stringResource(R.string.cerrar_sesion))
                 }
             }
         }
@@ -88,17 +92,17 @@ fun PerfilScreen(
     if (confirmar) {
         AlertDialog(
             onDismissRequest = { confirmar = false },
-            title = { Text("Cerrar sesión") },
-            text = { Text("¿Quieres salir de tu cuenta?") },
+            title = { Text(stringResource(R.string.cerrar_sesion)) },
+            text = { Text(stringResource(R.string.confirmar_cerrar_sesion)) },
             confirmButton = {
                 TextButton(onClick = {
                     confirmar = false
                     vm.cerrarSesion()
                     // Borra todo el historial para que "atrás" no vuelva a una pantalla con sesión
                     navController.navigate(Rutas.LOGIN) { popUpTo(navController.graph.id) { inclusive = true } }
-                }) { Text("Salir") }
+                }) { Text(stringResource(R.string.salir)) }
             },
-            dismissButton = { TextButton(onClick = { confirmar = false }) { Text("Cancelar") } }
+            dismissButton = { TextButton(onClick = { confirmar = false }) { Text(stringResource(R.string.cancelar)) } }
         )
     }
 }

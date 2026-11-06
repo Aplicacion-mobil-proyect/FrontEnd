@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoEventoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,20 +40,20 @@ fun EventosScreen(navController: NavController, vm: EventosViewModel = viewModel
     val tipo by vm.tipo.collectAsState()
     val snack = remember { SnackbarHostState() }
 
-    PatScaffold("Eventos", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.eventos), snack, onVolver = { navController.popBackStack() }) { padding ->
         Column(Modifier.padding(padding)) {
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                item { FilterChip(selected = tipo == null, onClick = { vm.seleccionarTipo(null) }, label = { Text("Todos") }) }
+                item { FilterChip(selected = tipo == null, onClick = { vm.seleccionarTipo(null) }, label = { Text(stringResource(R.string.todos)) }) }
                 items(TIPOS_EVENTO) { t ->
-                    FilterChip(selected = tipo == t, onClick = { vm.seleccionarTipo(t) }, label = { Text(t) })
+                    FilterChip(selected = tipo == t, onClick = { vm.seleccionarTipo(t) }, label = { Text(tipoEventoTexto(t)) })
                 }
             }
             PatUiContent(state) { lista ->
                 if (lista.isEmpty()) {
-                    PatMensajeCentral("No hay eventos próximos de este tipo")
+                    PatMensajeCentral(stringResource(R.string.sin_eventos_tipo))
                 } else {
                     LazyColumn(
                         contentPadding = PaddingValues(16.dp),
@@ -62,7 +65,7 @@ fun EventosScreen(navController: NavController, vm: EventosViewModel = viewModel
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                    Text(e.tipo, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                                    Text(tipoEventoTexto(e.tipo), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
                                     Text(e.titulo, style = MaterialTheme.typography.titleMedium)
                                     Text(e.recintoNombre, style = MaterialTheme.typography.bodyMedium)
                                     Text(
