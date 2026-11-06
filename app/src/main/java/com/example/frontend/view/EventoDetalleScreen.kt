@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoEventoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.aspectRatio
 import com.example.frontend.view.components.ImagenRecinto
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +44,7 @@ fun EventoDetalleScreen(navController: NavController, vm: EventoDetalleViewModel
     PatMensajes(vm.mensaje, snack, vm::mensajeMostrado)
 
     PatScaffold(
-        titulo = "Detalle del evento",
+        titulo = stringResource(R.string.detalle_evento),
         snackbarHostState = snack,
         onVolver = { navController.popBackStack() },
         acciones = {
@@ -51,7 +54,7 @@ fun EventoDetalleScreen(navController: NavController, vm: EventoDetalleViewModel
                 IconButton(onClick = { vm.alternarFavorito(evento.recintoId) }) {
                     Icon(
                         if (esFavorito) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = if (esFavorito) "Quitar recinto de favoritos" else "Guardar recinto en favoritos",
+                        contentDescription = if (esFavorito) stringResource(R.string.quitar_recinto_favoritos) else stringResource(R.string.guardar_recinto_favoritos),
                         tint = if (esFavorito) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -64,15 +67,15 @@ fun EventoDetalleScreen(navController: NavController, vm: EventoDetalleViewModel
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ImagenRecinto(e.recintoId, e.recintoNombre, Modifier.fillMaxWidth().aspectRatio(16f / 9f))
-                Text(e.tipo, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                Text(tipoEventoTexto(e.tipo), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                 Text(e.titulo, style = MaterialTheme.typography.headlineSmall)
-                Text("Lugar: ${e.recintoNombre}", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.lugar_x, e.recintoNombre), style = MaterialTheme.typography.bodyLarge)
                 Text("${FechasUtil.isoALegible(e.fecha)}, ${e.hora}", style = MaterialTheme.typography.bodyMedium)
                 Text(e.descripcion, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(top = 8.dp))
                 OutlinedButton(
                     onClick = { navController.navigate(Destinos.ficha(e.recintoId)) },
                     modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-                ) { Text("Ver ficha del recinto") }
+                ) { Text(stringResource(R.string.ver_ficha_recinto)) }
             }
         }
     }

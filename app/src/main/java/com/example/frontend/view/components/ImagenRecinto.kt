@@ -1,5 +1,6 @@
 package com.example.frontend.view.components
 
+import androidx.compose.ui.res.stringResource
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -56,7 +57,7 @@ fun ImagenRecinto(
     if (recurso != null) {
         Image(
             painter = painterResource(recurso),
-            contentDescription = "Fachada de $nombre",
+            contentDescription = stringResource(R.string.fachada_de, nombre),
             contentScale = ContentScale.Crop,
             modifier = modifier.clip(forma)
         )

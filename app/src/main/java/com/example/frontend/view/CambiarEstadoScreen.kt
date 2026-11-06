@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.frontend.model.EstadosRecinto
-import com.example.frontend.util.etiquetaEstadoRecinto
+import com.example.frontend.view.components.etiquetaEstadoRecinto
 import com.example.frontend.view.components.PatMensajes
 import com.example.frontend.view.components.PatScaffold
 import com.example.frontend.view.components.PatUiContent
@@ -40,12 +42,12 @@ fun CambiarEstadoScreen(navController: NavController, vm: CambiarEstadoViewModel
         if (vm.guardado) navController.popBackStack()
     }
 
-    PatScaffold("Cambiar estado", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.cambiar_estado), snack, onVolver = { navController.popBackStack() }) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { recinto ->
             val elegido = vm.seleccion ?: recinto.estado
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(recinto.nombre, style = MaterialTheme.typography.titleLarge)
-                Text("Estado actual: ${etiquetaEstadoRecinto(recinto.estado)}", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.estado_actual, etiquetaEstadoRecinto(recinto.estado)), style = MaterialTheme.typography.bodyMedium)
                 Column(Modifier.selectableGroup().padding(top = 8.dp)) {
                     EstadosRecinto.todos.forEach { estado ->
                         Row(
@@ -63,7 +65,7 @@ fun CambiarEstadoScreen(navController: NavController, vm: CambiarEstadoViewModel
                     onClick = { vm.guardar(recinto.estado) },
                     enabled = !vm.guardando,
                     modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-                ) { Text("Guardar estado") }
+                ) { Text(stringResource(R.string.guardar_estado)) }
             }
         }
     }

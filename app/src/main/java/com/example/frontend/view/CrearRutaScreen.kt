@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,13 +43,13 @@ fun CrearRutaScreen(navController: NavController, vm: CrearRutaViewModel = viewM
         if (vm.guardado) navController.popBackStack()
     }
 
-    PatScaffold("Crear ruta", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.crear_ruta), snack, onVolver = { navController.popBackStack() }) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { recintos ->
             Column(Modifier.padding(horizontal = 16.dp)) {
-                PatCampo(vm.nombre, vm::cambiarNombre, "Nombre de la ruta", vm.errorNombre, Modifier.padding(top = 8.dp), placeholder = "Ej: Ruta colonial del centro")
+                PatCampo(vm.nombre, vm::cambiarNombre, stringResource(R.string.nombre_ruta), vm.errorNombre, Modifier.padding(top = 8.dp), placeholder = stringResource(R.string.ejemplo_nombre_ruta))
 
                 Text(
-                    "Elige entre ${CrearRutaViewModel.MIN_PARADAS} y ${CrearRutaViewModel.MAX_PARADAS} recintos, en el orden en que los quieres visitar.",
+                    stringResource(R.string.instrucciones_ruta, CrearRutaViewModel.MIN_PARADAS, CrearRutaViewModel.MAX_PARADAS),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
@@ -64,17 +66,17 @@ fun CrearRutaScreen(navController: NavController, vm: CrearRutaViewModel = viewM
                             Checkbox(checked = orden > 0, onCheckedChange = { vm.alternar(r.id) })
                             Column(Modifier.weight(1f)) {
                                 Text(r.nombre, style = MaterialTheme.typography.bodyLarge)
-                                Text("${r.comuna} · ${r.duracionVisita} min", style = MaterialTheme.typography.bodySmall,
+                                Text(stringResource(R.string.comuna_duracion, r.comuna, r.duracionVisita), style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            if (orden > 0) Text("Parada $orden", style = MaterialTheme.typography.labelLarge,
+                            if (orden > 0) Text(stringResource(R.string.parada_n, orden), style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(end = 8.dp))
                         }
                     }
                 }
 
                 Text(
-                    "${vm.seleccion.size} recinto(s) · duración estimada: ${formatearMinutos(vm.duracionEstimada(recintos))}",
+                    stringResource(R.string.resumen_ruta, vm.seleccion.size, formatearMinutos(vm.duracionEstimada(recintos))),
                     style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -83,7 +85,7 @@ fun CrearRutaScreen(navController: NavController, vm: CrearRutaViewModel = viewM
                     enabled = !vm.guardando,
                     modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
                 ) {
-                    if (vm.guardando) CircularProgressIndicator(Modifier.padding(2.dp)) else Text("Guardar ruta")
+                    if (vm.guardando) CircularProgressIndicator(Modifier.padding(2.dp)) else Text(stringResource(R.string.guardar_ruta))
                 }
             }
         }

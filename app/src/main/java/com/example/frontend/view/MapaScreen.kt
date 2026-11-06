@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoRecintoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import com.example.frontend.view.components.ImagenRecinto
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -67,7 +70,7 @@ fun MapaScreen(navController: NavController, vm: MapaViewModel = viewModel()) {
     val snack = remember { SnackbarHostState() }
     var seleccionado by remember { mutableStateOf<Recinto?>(null) }
 
-    PatScaffold("Mapa patrimonial", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.mapa_patrimonial), snack, onVolver = { navController.popBackStack() }) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { recintos ->
             val dentro = recintos.filter { it.dentroDelMapa() }
             val fuera = recintos.filterNot { it.dentroDelMapa() }
@@ -80,11 +83,11 @@ fun MapaScreen(navController: NavController, vm: MapaViewModel = viewModel()) {
 
                 // Leyenda
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Leyenda(colorEstado(EstadosRecinto.ABIERTO), "Abierto")
-                    Leyenda(colorEstado(EstadosRecinto.CERRADO), "Cerrado")
-                    Leyenda(colorEstado(EstadosRecinto.EN_CELEBRACION), "En celebración")
+                    Leyenda(colorEstado(EstadosRecinto.ABIERTO), stringResource(R.string.abierto))
+                    Leyenda(colorEstado(EstadosRecinto.CERRADO), stringResource(R.string.cerrado))
+                    Leyenda(colorEstado(EstadosRecinto.EN_CELEBRACION), stringResource(R.string.en_celebracion))
                 }
-                Text("Mapa esquemático del centro de Santiago. Toca un punto para ver el recinto.",
+                Text(stringResource(R.string.mapa_esquematico),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                 seleccionado?.let { r ->
@@ -92,15 +95,15 @@ fun MapaScreen(navController: NavController, vm: MapaViewModel = viewModel()) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             ImagenRecinto(r.id, r.nombre, Modifier.fillMaxWidth().aspectRatio(16f / 9f))
                             Text(r.nombre, style = MaterialTheme.typography.titleMedium)
-                            Text("${r.tipo} · ${r.comuna}", style = MaterialTheme.typography.bodyMedium)
+                            Text("${tipoRecintoTexto(r.tipo)} · ${r.comuna}", style = MaterialTheme.typography.bodyMedium)
                             PatEstadoChip(r.estado)
-                            Button(onClick = { navController.navigate(Destinos.ficha(r.id)) }) { Text("Ver ficha") }
+                            Button(onClick = { navController.navigate(Destinos.ficha(r.id)) }) { Text(stringResource(R.string.ver_ficha)) }
                         }
                     }
                 }
 
                 if (fuera.isNotEmpty()) {
-                    Text("Fuera del área del mapa", style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.fuera_del_mapa), style = MaterialTheme.typography.titleSmall)
                     fuera.forEach { r ->
                         Card(onClick = { navController.navigate(Destinos.ficha(r.id)) }, modifier = Modifier.fillMaxWidth()) {
                             Text("${r.nombre} (${r.comuna})", Modifier.padding(16.dp), style = MaterialTheme.typography.bodyMedium)

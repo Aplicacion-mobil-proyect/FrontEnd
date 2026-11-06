@@ -1,5 +1,7 @@
 package com.example.frontend.view
 
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -49,18 +51,18 @@ fun MisRutasScreen(navController: NavController, vm: MisRutasViewModel = viewMod
     PatMensajes(vm.mensaje, snack, vm::mensajeMostrado)
 
     PatScaffold(
-        titulo = "Mis rutas",
+        titulo = stringResource(R.string.mis_rutas),
         snackbarHostState = snack,
         onVolver = { navController.popBackStack() },
         fab = {
             FloatingActionButton(onClick = { navController.navigate(Rutas.CREAR_RUTA) }) {
-                Icon(Icons.Filled.Add, contentDescription = "Crear ruta")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.crear_ruta))
             }
         }
     ) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { lista ->
             if (lista.isEmpty()) {
-                PatMensajeCentral("Aún no tienes rutas.\nToca + para armar un recorrido por varios recintos.")
+                PatMensajeCentral(stringResource(R.string.sin_rutas))
             } else {
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp, 16.dp, 16.dp, 88.dp),
@@ -75,13 +77,13 @@ fun MisRutasScreen(navController: NavController, vm: MisRutasViewModel = viewMod
                                 Column(Modifier.weight(1f)) {
                                     Text(ruta.nombre, style = MaterialTheme.typography.titleMedium)
                                     Text(
-                                        "Duración estimada: ${formatearMinutos(ruta.duracion)}",
+                                        stringResource(R.string.duracion_estimada_x, formatearMinutos(ruta.duracion)),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 IconButton(onClick = { porEliminar = ruta }) {
-                                    Icon(Icons.Filled.Delete, contentDescription = "Eliminar ${ruta.nombre}", tint = MaterialTheme.colorScheme.error)
+                                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.eliminar_x, ruta.nombre), tint = MaterialTheme.colorScheme.error)
                                 }
                             }
                         }
@@ -93,9 +95,9 @@ fun MisRutasScreen(navController: NavController, vm: MisRutasViewModel = viewMod
 
     porEliminar?.let { ruta ->
         PatConfirmDialog(
-            titulo = "Eliminar ruta",
-            texto = "¿Eliminar la ruta \"${ruta.nombre}\"?",
-            textoConfirmar = "Eliminar",
+            titulo = stringResource(R.string.eliminar_ruta),
+            texto = stringResource(R.string.confirmar_eliminar_ruta, ruta.nombre),
+            textoConfirmar = stringResource(R.string.eliminar),
             onConfirmar = { vm.eliminar(ruta.id); porEliminar = null },
             onCancelar = { porEliminar = null }
         )

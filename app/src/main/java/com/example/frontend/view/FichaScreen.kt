@@ -1,5 +1,9 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoRecintoTexto
+import com.example.frontend.view.components.tipoEventoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.aspectRatio
 import com.example.frontend.view.components.ImagenRecinto
 import android.content.ActivityNotFoundException
@@ -55,7 +59,7 @@ fun FichaScreen(navController: NavController, vm: FichaViewModel = viewModel()) 
     PatMensajes(vm.mensaje, snack, vm::mensajeMostrado)
 
     PatScaffold(
-        titulo = "Ficha patrimonial",
+        titulo = stringResource(R.string.ficha_patrimonial),
         snackbarHostState = snack,
         onVolver = { navController.popBackStack() },
         acciones = {
@@ -63,7 +67,7 @@ fun FichaScreen(navController: NavController, vm: FichaViewModel = viewModel()) 
                 IconButton(onClick = { vm.alternarFavorito() }) {
                     Icon(
                         if (esFavorito) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = if (esFavorito) "Quitar de favoritos" else "Agregar a favoritos",
+                        contentDescription = if (esFavorito) stringResource(R.string.quitar_de_favoritos) else stringResource(R.string.agregar_a_favoritos),
                         tint = if (esFavorito) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -79,10 +83,10 @@ fun FichaScreen(navController: NavController, vm: FichaViewModel = viewModel()) 
             ) {
                 ImagenRecinto(r.id, r.nombre, Modifier.fillMaxWidth().aspectRatio(4f / 3f))
                 Text(r.nombre, style = MaterialTheme.typography.headlineSmall)
-                Text("${r.tipo} · ${r.comuna}", style = MaterialTheme.typography.bodyLarge)
+                Text("${tipoRecintoTexto(r.tipo)} · ${r.comuna}", style = MaterialTheme.typography.bodyLarge)
                 PatEstadoChip(r.estado)
                 Text(r.direccion, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Duración estimada de la visita: ${r.duracionVisita} min", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.duracion_visita_ficha, r.duracionVisita), style = MaterialTheme.typography.bodyMedium)
 
                 Row(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(onClick = {
@@ -93,33 +97,33 @@ fun FichaScreen(navController: NavController, vm: FichaViewModel = viewModel()) 
                         } catch (e: ActivityNotFoundException) {
                             // No hay app de mapas instalada
                         }
-                    }, modifier = Modifier.weight(1f)) { Text("Cómo llegar") }
+                    }, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.como_llegar)) }
 
                     Button(
                         onClick = { navController.navigate(Destinos.planificarVisita(r.id)) },
                         enabled = !cerrado,
                         modifier = Modifier.weight(1f)
-                    ) { Text("Planificar visita") }
+                    ) { Text(stringResource(R.string.planificar_visita)) }
                 }
                 if (cerrado) {
                     Text(
-                        "Este recinto está cerrado: por ahora no se pueden agendar visitas.",
+                        stringResource(R.string.recinto_cerrado_aviso),
                         color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall
                     )
                 }
 
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                Text("Reseña histórica", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.resena_historica), style = MaterialTheme.typography.titleMedium)
                 Text(r.descripcion, style = MaterialTheme.typography.bodyLarge)
 
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                Text("Horarios", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.horarios), style = MaterialTheme.typography.titleMedium)
                 PatHorarios(data.horarios)
 
                 HorizontalDivider(Modifier.padding(vertical = 8.dp))
-                Text("Próximos eventos", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.proximos_eventos), style = MaterialTheme.typography.titleMedium)
                 if (data.eventos.isEmpty()) {
-                    Text("No hay eventos próximos en este recinto.", style = MaterialTheme.typography.bodyMedium,
+                    Text(stringResource(R.string.sin_eventos_recinto), style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 } else {
                     data.eventos.forEach { e ->
@@ -128,7 +132,7 @@ fun FichaScreen(navController: NavController, vm: FichaViewModel = viewModel()) 
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Column(Modifier.padding(12.dp)) {
-                                Text(e.tipo, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                                Text(tipoEventoTexto(e.tipo), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
                                 Text(e.titulo, style = MaterialTheme.typography.titleSmall)
                                 Text("${FechasUtil.isoALegible(e.fecha)} · ${e.hora}", style = MaterialTheme.typography.bodySmall)
                             }

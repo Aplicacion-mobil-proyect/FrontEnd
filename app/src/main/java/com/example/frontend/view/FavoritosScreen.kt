@@ -1,5 +1,8 @@
 package com.example.frontend.view
 
+import com.example.frontend.view.components.tipoRecintoTexto
+import com.example.frontend.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.size
 import com.example.frontend.view.components.ImagenRecinto
@@ -46,10 +49,10 @@ fun FavoritosScreen(navController: NavController, vm: FavoritosViewModel = viewM
     val snack = remember { SnackbarHostState() }
     PatMensajes(vm.mensaje, snack, vm::mensajeMostrado)
 
-    PatScaffold("Mis favoritos", snack, onVolver = { navController.popBackStack() }) { padding ->
+    PatScaffold(stringResource(R.string.mis_favoritos), snack, onVolver = { navController.popBackStack() }) { padding ->
         PatUiContent(state, Modifier.padding(padding)) { lista ->
             if (lista.isEmpty()) {
-                PatMensajeCentral("Aún no tienes favoritos.\nToca el corazón de un recinto para guardarlo aquí.")
+                PatMensajeCentral(stringResource(R.string.sin_favoritos))
             } else {
                 LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     items(lista, key = { it.id }) { r ->
@@ -62,13 +65,13 @@ fun FavoritosScreen(navController: NavController, vm: FavoritosViewModel = viewM
                                 Spacer(Modifier.width(12.dp))
                                 Column(Modifier.weight(1f)) {
                                     Text(r.nombre, style = MaterialTheme.typography.titleMedium)
-                                    Text("${r.tipo} · ${r.comuna}", style = MaterialTheme.typography.bodyMedium,
+                                    Text("${tipoRecintoTexto(r.tipo)} · ${r.comuna}", style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     Spacer(Modifier.height(8.dp))
                                     PatEstadoChip(r.estado)
                                 }
                                 IconButton(onClick = { vm.quitar(r.id) }) {
-                                    Icon(Icons.Filled.Favorite, contentDescription = "Quitar ${r.nombre} de favoritos",
+                                    Icon(Icons.Filled.Favorite, contentDescription = stringResource(R.string.quitar_x_favoritos, r.nombre),
                                         tint = MaterialTheme.colorScheme.error)
                                 }
                             }
