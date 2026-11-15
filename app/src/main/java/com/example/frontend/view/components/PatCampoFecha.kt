@@ -1,7 +1,7 @@
 package com.example.frontend.view.components
 
-import com.example.frontend.R
-import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,33 +43,36 @@ fun PatCampoFecha(
     maxDiasAnticipacion: Int,
     onFechaElegida: (String) -> Unit,
     modifier: Modifier = Modifier,
-    etiqueta: String = stringResource(R.string.fecha)
+    etiqueta: String = "Fecha"
 ) {
     var mostrar by remember { mutableStateOf(false) }
 
-    // Tocar el campo (no solo el ícono) abre el calendario
-    val interaccion = remember { MutableInteractionSource() }
-    LaunchedEffect(interaccion) {
-        interaccion.interactions.collect { if (it is PressInteraction.Release) mostrar = true }
-    }
 
-    OutlinedTextField(
-        value = valor,
-        onValueChange = {},               // no se escribe a mano: se elige en el calendario
-        readOnly = true,
-        interactionSource = interaccion,
-        label = { Text(etiqueta) },
-        placeholder = { Text(stringResource(R.string.toca_para_elegir)) },
-        trailingIcon = {
-            IconButton(onClick = { mostrar = true }) {
-                Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.elegir_fecha))
-            }
-        },
-        isError = error != null,
-        supportingText = if (error != null) { { Text(error) } } else null,
-        singleLine = true,
-        modifier = modifier.fillMaxWidth()
-    )
+    // La capa transparente de encima recibe el toque: así abre aunque el campo sea de solo lectura
+    Box(modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            value = valor,
+            onValueChange = {},               // no se escribe a mano: se elige en el calendario
+            readOnly = true,
+            label = { Text(etiqueta) },
+            placeholder = { Text("Toca para elegir") },
+            trailingIcon = {
+                IconButton(onClick = { mostrar = true }) {
+                    Icon(Icons.Filled.DateRange, contentDescription = "Elegir fecha")
+                }
+            },
+            isError = error != null,
+            supportingText = if (error != null) { { Text(error) } } else null,
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Box(
+            Modifier.matchParentSize().clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { mostrar = true }
+        )
+    }
 
     if (mostrar) {
         val hoy = FechasUtil.hoyIso()
@@ -96,9 +99,9 @@ fun PatCampoFecha(
                         mostrar = false
                     },
                     enabled = estado.selectedDateMillis != null
-                ) { Text(stringResource(R.string.aceptar)) }
+                ) { Text("Aceptar") }
             },
-            dismissButton = { TextButton(onClick = { mostrar = false }) { Text(stringResource(R.string.cancelar)) } }
+            dismissButton = { TextButton(onClick = { mostrar = false }) { Text("Cancelar") } }
         ) {
             DatePicker(state = estado)
         }

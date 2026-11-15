@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="primero_elige_fecha">Choisissez d\'abord la date</string>
+    <string name="sin_horarios_disponibles">Il ne reste aucun créneau pour cette date</string>
+    <string name="elegir_hora">Choisir l\'heure</string>
+</resources>

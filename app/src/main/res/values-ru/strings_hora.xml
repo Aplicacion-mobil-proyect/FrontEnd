@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="primero_elige_fecha">Сначала выберите дату</string>
+    <string name="sin_horarios_disponibles">На эту дату не осталось свободного времени</string>
+    <string name="elegir_hora">Выбрать время</string>
+</resources>

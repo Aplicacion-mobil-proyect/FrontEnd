@@ -35,6 +35,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.frontend.navigation.Rutas
 import com.example.frontend.view.components.PatCampo
+import com.example.frontend.view.components.PatCampoHora
+import com.example.frontend.util.FechasUtil
 import com.example.frontend.view.components.PatCampoFecha
 import com.example.frontend.view.components.PatEstadoChip
 import com.example.frontend.view.components.PatHorarios
@@ -82,9 +84,23 @@ fun PlanificarVisitaScreen(navController: NavController, vm: PlanificarVisitaVie
                     error = vm.errorFecha,
                     diasAtencion = data.horarios.filter { !it.especial }.map { it.dia }.toSet(),
                     maxDiasAnticipacion = PlanificarVisitaViewModel.MAX_DIAS_ANTICIPACION,
-                    onFechaElegida = vm::cambiarFecha
+                    onFechaElegida = { vm.cambiarFecha(it); vm.cambiarHora("") }
                 )
-                PatCampo(vm.hora, vm::cambiarHora, stringResource(R.string.hora_llegada), vm.errorHora, placeholder = "HH:mm")
+                // Horario del recinto para la fecha elegida (null si aún no hay fecha o ese día no atiende)
+                val fechaIso = FechasUtil.ddMmYyyyAIso(vm.fecha)
+                val tramo = fechaIso?.let { iso ->
+                    val dia = FechasUtil.diaSemanaIso(iso)
+                    data.horarios.firstOrNull { !it.especial && it.dia == dia }
+                }
+                PatCampoHora(
+                    valor = vm.hora,
+                    error = vm.errorHora,
+                    fechaIso = fechaIso,
+                    apertura = tramo?.apertura,
+                    cierre = tramo?.cierre,
+                    duracionMin = r.duracionVisita,
+                    onHoraElegida = vm::cambiarHora
+                )
                 PatCampo(
                     vm.personas, vm::cambiarPersonas,
                     stringResource(R.string.cantidad_personas, vm.minPersonas, vm.maxPersonas),

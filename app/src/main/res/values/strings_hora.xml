@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="primero_elige_fecha">Primero elige la fecha</string>
+    <string name="sin_horarios_disponibles">No quedan horarios disponibles para esa fecha</string>
+    <string name="elegir_hora">Elegir hora</string>
+</resources>

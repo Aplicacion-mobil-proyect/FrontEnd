@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="primero_elige_fecha">Wählen Sie zuerst das Datum</string>
+    <string name="sin_horarios_disponibles">Für dieses Datum sind keine Zeiten mehr verfügbar</string>
+    <string name="elegir_hora">Uhrzeit auswählen</string>
+</resources>
