@@ -23,6 +23,7 @@ object Rutas {
     const val CREAR_RUTA = "crear_ruta"
     const val INICIAR_RUTA = "ruta/{rutaId}"
     const val PERFIL = "perfil"
+    const val EDITAR_PERFIL = "editar_perfil"
 
     // Encargado
     const val ENC_MI_RECINTO = "enc_recinto"

@@ -10,6 +10,8 @@ import com.example.frontend.model.Roles
 import com.example.frontend.model.Usuario
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.Locale
+import com.example.frontend.util.FechasUtil
 
 /*
  * Datos ficticios que se cargan la primera vez que se abre la app.
@@ -187,37 +189,49 @@ object SeedData {
     // ------------------------------------------------------------------
     // Eventos culturales
     // ------------------------------------------------------------------
+    // Las fechas se calculan a partir de hoy para que siempre haya eventos próximos
+    // (con fechas fijas, la lista de eventos quedaba vacía cuando pasaban).
+    private fun enDias(dias: Int): String = FechasUtil.isoMasDias(dias)
+
+    // Próxima vez que cae ese día y mes (este año, o el siguiente si ya pasó). Ej: Navidad -> proxima(12, 24)
+    private fun proxima(mes: Int, dia: Int): String {
+        val hoy = FechasUtil.hoyIso()
+        val anio = hoy.take(4).toInt()
+        val esteAnio = String.format(Locale.US, "%04d-%02d-%02d", anio, mes, dia)
+        return if (esteAnio >= hoy) esteAnio else String.format(Locale.US, "%04d-%02d-%02d", anio + 1, mes, dia)
+    }
+
     private val eventos = listOf(
         Evento(recintoId = 1, titulo = "Concierto de música sacra",
             descripcion = "Coro y órgano interpretan obras de compositores coloniales.",
-            tipo = "Música sacra", fecha = "2026-11-14", hora = "19:00"),
+            tipo = "Música sacra", fecha = enDias(3), hora = "19:00"),
         Evento(recintoId = 1, titulo = "Misa de Navidad",
             descripcion = "Celebración solemne presidida por el Arzobispo de Santiago.",
-            tipo = "Litúrgico", fecha = "2026-12-24", hora = "23:00"),
+            tipo = "Litúrgico", fecha = proxima(12, 24), hora = "23:00"),
         Evento(recintoId = 2, titulo = "Exposición de arte colonial",
             descripcion = "Muestra de pinturas y tallas de los siglos XVII y XVIII.",
-            tipo = "Exposición", fecha = "2026-11-20", hora = "10:00"),
+            tipo = "Exposición", fecha = enDias(7), hora = "10:00"),
         Evento(recintoId = 3, titulo = "Fiesta de San Francisco de Asís",
             descripcion = "Misa solemne y bendición de animales en el atrio.",
-            tipo = "Litúrgico", fecha = "2026-12-04", hora = "11:00"),
+            tipo = "Litúrgico", fecha = proxima(10, 4), hora = "11:00"),
         Evento(recintoId = 5, titulo = "Recital de órgano",
             descripcion = "Recorrido por la música para órgano desde el barroco hasta el siglo XX.",
-            tipo = "Música sacra", fecha = "2026-11-28", hora = "19:30"),
+            tipo = "Música sacra", fecha = enDias(12), hora = "19:30"),
         Evento(recintoId = 6, titulo = "Libros que cruzaron el océano",
             descripcion = "Exposición de libros antiguos de la biblioteca patrimonial dominica.",
-            tipo = "Exposición", fecha = "2026-11-08", hora = "11:00"),
+            tipo = "Exposición", fecha = enDias(1), hora = "11:00"),
         Evento(recintoId = 7, titulo = "Fiesta de la Inmaculada Concepción",
             descripcion = "Peregrinación y misa al aire libre en la cumbre del cerro San Cristóbal.",
-            tipo = "Litúrgico", fecha = "2026-12-08", hora = "10:00"),
+            tipo = "Litúrgico", fecha = proxima(12, 8), hora = "10:00"),
         Evento(recintoId = 8, titulo = "Coro de niños de Quinta Normal",
             descripcion = "Concierto de villancicos con coros de colegios de la comuna.",
-            tipo = "Música sacra", fecha = "2026-12-12", hora = "18:00"),
+            tipo = "Música sacra", fecha = enDias(21), hora = "18:00"),
         Evento(recintoId = 9, titulo = "Historia de la Independencia en el Votivo",
             descripcion = "Exposición sobre la batalla de Maipú y la construcción del templo.",
-            tipo = "Exposición", fecha = "2026-11-15", hora = "12:00"),
+            tipo = "Exposición", fecha = enDias(5), hora = "12:00"),
         Evento(recintoId = 11, titulo = "Noche de música sacra en Los Dominicos",
             descripcion = "Conjunto de cámara interpreta obras de Bach y Vivaldi.",
-            tipo = "Música sacra", fecha = "2026-11-21", hora = "20:00")
+            tipo = "Música sacra", fecha = enDias(16), hora = "20:00")
     )
 
     // ------------------------------------------------------------------

@@ -16,6 +16,7 @@ import com.example.frontend.model.Ruta
 import com.example.frontend.model.RutaParada
 import com.example.frontend.model.Visita
 import com.example.frontend.model.VisitaDetalle
+import com.example.frontend.util.FechasUtil
 import kotlinx.coroutines.flow.Flow
 
 /*
@@ -177,9 +178,22 @@ abstract class PatrimonioDao {
     )
     abstract suspend fun guiasEnRecinto(recintoId: Int, dia: Int, hora: String): List<Guia>
 
-    // Guías que ya tienen una visita agendada en esa fecha y hora
-    @Query("SELECT guiaId FROM visita WHERE fecha = :fecha AND hora = :hora AND guiaId IS NOT NULL AND estado = 'AGENDADA'")
-    abstract suspend fun guiasOcupados(fecha: String, hora: String): List<Int>
+    // Guías ocupados ese día entre :hora y :horaFin. Una visita ya agendada ocupa al guía
+    // desde su hora hasta su hora + la duración de la visita de ese recinto (strftime suma los minutos).
+    @Query(
+        """SELECT v.guiaId FROM visita v INNER JOIN recinto r ON r.id = v.recintoId
+           WHERE v.fecha = :fecha AND v.guiaId IS NOT NULL AND v.estado = 'AGENDADA'
+           AND v.hora < :horaFin
+           AND strftime('%H:%M', v.hora, '+' || r.duracionVisita || ' minutes') > :hora"""
+    )
+    abstract suspend fun guiasOcupados(fecha: String, hora: String, horaFin: String): List<Int>
+
+    @Query("SELECT duracionVisita FROM recinto WHERE id = :recintoId")
+    abstract suspend fun duracionVisita(recintoId: Int): Int?
+
+    /** Hora en que termina una visita que empieza a [hora] en ese recinto ("10:30" + 45 min -> "11:15"). */
+    suspend fun horaFinVisita(recintoId: Int, hora: String): String =
+        FechasUtil.horaDesdeMinutos(FechasUtil.minutos(hora) + (duracionVisita(recintoId) ?: 30))
 
     @Query(
         """SELECT COUNT(*) FROM visita WHERE usuarioId = :usuarioId AND recintoId = :recintoId
@@ -202,7 +216,8 @@ abstract class PatrimonioDao {
         }
         if (visita.conGuia) {
             val guiaId = visita.guiaId
-            check(guiaId != null && guiaId !in guiasOcupados(visita.fecha, visita.hora)) {
+            val horaFin = horaFinVisita(visita.recintoId, visita.hora)
+            check(guiaId != null && guiaId !in guiasOcupados(visita.fecha, visita.hora, horaFin)) {
                 "El guía seleccionado ya no está disponible en ese horario"
             }
         }

@@ -20,6 +20,8 @@ object Sesion {
             .putString("email", usuario.email)
             .putString("rol", usuario.rol)
             .putInt("recintoId", usuario.recintoId ?: -1)
+            .putString("apodo", usuario.apodo)
+            .putInt("avatar", usuario.avatar)
             .apply()
     }
 
@@ -35,7 +37,9 @@ object Sesion {
             email = prefs.getString("email", "") ?: "",
             password = "",                       // la contraseña no se guarda en la sesión
             rol = prefs.getString("rol", "") ?: "",
-            recintoId = if (recintoId == -1) null else recintoId
+            recintoId = if (recintoId == -1) null else recintoId,
+            apodo = prefs.getString("apodo", null),
+            avatar = prefs.getInt("avatar", 0)
         )
     }
 

@@ -12,5 +12,7 @@ data class Usuario(
     val email: String,
     val password: String,
     val rol: String,              // Roles.TURISTA, Roles.COLEGIO o Roles.ENCARGADO
-    val recintoId: Int? = null    // solo el ENCARGADO tiene un recinto asignado
+    val recintoId: Int? = null,   // solo el ENCARGADO tiene un recinto asignado
+    val apodo: String? = null,    // opcional; si existe, se usa para saludar en la Home
+    val avatar: Int = 0           // posición del color elegido en ColoresAvatar (0 a 5)
 )

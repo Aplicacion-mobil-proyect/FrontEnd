@@ -7,20 +7,22 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.frontend.model.EstadosRecinto
+import com.example.frontend.util.TemaManager
 
-private val LightColorScheme = lightColorScheme(
-    primary = Burdeo,
+/** Arma el esquema claro de Material 3 con los colores de la paleta elegida. */
+private fun esquemaClaro(p: Paleta) = lightColorScheme(
+    primary = p.primario,
     onPrimary = Color.White,
-    primaryContainer = BurdeoContenedor,
-    onPrimaryContainer = BurdeoOscuroContenedor,
-    secondary = Dorado,
+    primaryContainer = p.primarioContenedor,
+    onPrimaryContainer = p.enPrimarioContenedor,
+    secondary = p.secundario,
     onSecondary = Color.White,
-    secondaryContainer = DoradoContenedor,
-    onSecondaryContainer = DoradoOscuroContenedor,
+    secondaryContainer = p.secundarioContenedor,
+    onSecondaryContainer = p.enSecundarioContenedor,
     tertiary = Piedra,
-    background = FondoClaro,
+    background = p.fondo,
     onBackground = TextoPrincipal,
-    surface = FondoClaro,
+    surface = p.fondo,
     onSurface = TextoPrincipal,
     onSurfaceVariant = TextoSecundario,   // textos secundarios y etiquetas de los campos
     outline = Borde                       // borde de los OutlinedTextField
@@ -48,10 +50,11 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun FrontEndTheme(
     darkTheme: Boolean = false,
+    paleta: Paleta = TemaManager.paletaActual,   // la que eligió el usuario en el Perfil
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
+        colorScheme = if (darkTheme) DarkColorScheme else esquemaClaro(paleta),
         typography = Typography
     ) {
         // Surface pinta el fondo y le da a los textos el color "onSurface" por defecto

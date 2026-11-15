@@ -42,6 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.example.frontend.R
+import com.example.frontend.view.components.AvatarUsuario
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,11 +52,8 @@ import androidx.navigation.NavController
 import com.example.frontend.model.Roles
 import com.example.frontend.navigation.Rutas
 import com.example.frontend.session.Sesion
+import com.example.frontend.util.TemaManager
 
-// Colores propios de la Home (tonos piedra cálidos, combinan con el burdeo del tema)
-private val FondoHome = Color(0xFFF3EFEA)
-private val FondoDestacado = Color(0xFFDCD6D0)
-private val LogoTexto = Color(0xFFF6D9DD)
 
 /*
  * Pantalla principal del turista / colegio.
@@ -67,10 +67,16 @@ fun HomeScreen(navController: NavController) {
     val usuario = Sesion.obtener(context)
     val esEncargado = usuario?.rol == Roles.ENCARGADO
 
+    // Colores de la Home según la paleta elegida en el Perfil
+    val paleta = TemaManager.paletaActual
+    val fondoHome = paleta.fondoHome
+    val fondoDestacado = paleta.destacado
+    val logoTexto = paleta.primarioContenedor
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(FondoHome)
+            .background(fondoHome)
             .statusBarsPadding()
             .navigationBarsPadding()
             .verticalScroll(rememberScrollState())
@@ -85,7 +91,7 @@ fun HomeScreen(navController: NavController) {
                     .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(14.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Filled.AccountBalance, contentDescription = null, tint = LogoTexto)
+                Icon(Icons.Filled.AccountBalance, contentDescription = null, tint = logoTexto)
             }
             Column(
                 modifier = Modifier
@@ -94,16 +100,21 @@ fun HomeScreen(navController: NavController) {
             ) {
                 Text("Red Patrimonial", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Text(
-                    text = if (usuario != null) "Hola, ${usuario.nombre.substringBefore(' ')}" else "Arzobispado de Santiago",
+                    // Saluda con el apodo si tiene uno; si no, con el primer nombre
+                    text = if (usuario != null)
+                        stringResource(R.string.hola_x, usuario.apodo ?: usuario.nombre.substringBefore(' '))
+                    else stringResource(R.string.arzobispado),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             IconButton(onClick = { navController.navigate(Rutas.CERCANOS) }) {
-                Icon(Icons.Outlined.Search, contentDescription = "Buscar recintos")
+                Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.buscar_recintos))
             }
             IconButton(onClick = { navController.navigate(Rutas.PERFIL) }) {
-                Icon(Icons.Outlined.Person, contentDescription = "Mi perfil")
+                // Avatar con las iniciales y el color elegido en el perfil
+                if (usuario != null) AvatarUsuario(usuario.nombre, usuario.avatar, tamano = 34.dp)
+                else Icon(Icons.Outlined.Person, contentDescription = stringResource(R.string.mi_perfil))
             }
         }
 
@@ -111,8 +122,8 @@ fun HomeScreen(navController: NavController) {
         if (esEncargado) {
             TarjetaAncha(
                 icono = Icons.Outlined.Store,
-                titulo = "Mi recinto",
-                subtitulo = "Estado, horarios, eventos y guías",
+                titulo = stringResource(R.string.home_mi_recinto),
+                subtitulo = stringResource(R.string.home_mi_recinto_sub),
                 onClick = { navController.navigate(Rutas.ENC_MI_RECINTO) }
             )
         }
@@ -121,7 +132,7 @@ fun HomeScreen(navController: NavController) {
         Card(
             onClick = { navController.navigate(Rutas.MAPA) },
             shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = FondoDestacado),
+            colors = CardDefaults.cardColors(containerColor = fondoDestacado),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(190.dp)
@@ -138,10 +149,10 @@ fun HomeScreen(navController: NavController) {
                     modifier = Modifier.size(40.dp)
                 )
                 Spacer(Modifier.height(12.dp))
-                Text("Explora el patrimonio", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.home_explora), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "Templos, edificios históricos y rutas",
+                    stringResource(R.string.home_explora_sub),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -153,15 +164,15 @@ fun HomeScreen(navController: NavController) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             TarjetaChica(
                 icono = Icons.Outlined.AccountBalance,
-                titulo = "Templos",
-                subtitulo = "Historia y arquitectura",
+                titulo = stringResource(R.string.home_templos),
+                subtitulo = stringResource(R.string.home_templos_sub),
                 onClick = { navController.navigate(Rutas.CERCANOS) },
                 modifier = Modifier.weight(1f)
             )
             TarjetaChica(
                 icono = Icons.Outlined.Directions,
-                titulo = "Rutas",
-                subtitulo = "Recorridos patrimoniales",
+                titulo = stringResource(R.string.home_rutas),
+                subtitulo = stringResource(R.string.home_rutas_sub),
                 onClick = { navController.navigate(Rutas.MIS_RUTAS) },
                 modifier = Modifier.weight(1f)
             )
@@ -169,15 +180,15 @@ fun HomeScreen(navController: NavController) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             TarjetaChica(
                 icono = Icons.Outlined.Event,
-                titulo = "Eventos",
-                subtitulo = "Música sacra y exposiciones",
+                titulo = stringResource(R.string.home_eventos),
+                subtitulo = stringResource(R.string.home_eventos_sub),
                 onClick = { navController.navigate(Rutas.EVENTOS) },
                 modifier = Modifier.weight(1f)
             )
             TarjetaChica(
                 icono = Icons.Outlined.QrCodeScanner,
-                titulo = "Escanear QR",
-                subtitulo = "En la entrada del templo",
+                titulo = stringResource(R.string.home_qr),
+                subtitulo = stringResource(R.string.home_qr_sub),
                 onClick = { navController.navigate(Rutas.ESCANER_QR) },
                 modifier = Modifier.weight(1f)
             )
@@ -186,19 +197,19 @@ fun HomeScreen(navController: NavController) {
         // ---------- Tarjetas anchas ----------
         TarjetaAncha(
             icono = Icons.Outlined.FavoriteBorder,
-            titulo = "Mis favoritos",
-            subtitulo = "Los recintos que guardaste",
+            titulo = stringResource(R.string.home_favoritos),
+            subtitulo = stringResource(R.string.home_favoritos_sub),
             onClick = { navController.navigate(Rutas.FAVORITOS) }
         )
         TarjetaAncha(
             icono = Icons.Outlined.EventAvailable,
-            titulo = "Mis visitas",
-            subtitulo = "Visitas agendadas y guías asignados",
+            titulo = stringResource(R.string.home_visitas),
+            subtitulo = stringResource(R.string.home_visitas_sub),
             onClick = { navController.navigate(Rutas.MIS_VISITAS) }
         )
 
         Text(
-            "Arzobispado de Santiago · Área de Cultura",
+            stringResource(R.string.pie_arzobispado),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

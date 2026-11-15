@@ -41,9 +41,9 @@ class PatrimonioRepository(private val dao: PatrimonioDao) {
     suspend fun obtenerRuta(id: Int, usuarioId: Int) = dao.obtenerRuta(id, usuarioId)
     suspend fun paradasDeRuta(rutaId: Int) = dao.paradasDeRuta(rutaId)
 
-    /** Guías que atienden el recinto ese día/hora y que no tienen otra visita a la misma fecha y hora. */
+    /** Guías que atienden el recinto ese día/hora y que no tienen otra visita que se cruce con esta. */
     suspend fun guiasDisponibles(recintoId: Int, fecha: String, dia: Int, hora: String): List<Guia> {
-        val ocupados = dao.guiasOcupados(fecha, hora).toSet()
+        val ocupados = dao.guiasOcupados(fecha, hora, dao.horaFinVisita(recintoId, hora)).toSet()
         return dao.guiasEnRecinto(recintoId, dia, hora).filter { it.id !in ocupados }
     }
 

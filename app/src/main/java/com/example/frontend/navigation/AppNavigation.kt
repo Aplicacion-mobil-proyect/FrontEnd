@@ -12,6 +12,7 @@ import com.example.frontend.view.CambiarEstadoScreen
 import com.example.frontend.view.CercanosScreen
 import com.example.frontend.view.CrearRutaScreen
 import com.example.frontend.view.EditarHorariosScreen
+import com.example.frontend.view.EditarPerfilScreen
 import com.example.frontend.view.EventoDetalleScreen
 import com.example.frontend.view.EventoFormScreen
 import com.example.frontend.view.EventosScreen
@@ -104,6 +105,7 @@ fun AppNavigation() {
         ) { IniciarRutaScreen(navController) }
 
         composable(Rutas.PERFIL) { PerfilScreen(navController) }
+        composable(Rutas.EDITAR_PERFIL) { EditarPerfilScreen(navController) }
 
         // ----- Encargado -----
         composable(Rutas.ENC_MI_RECINTO) { MiRecintoScreen(navController) }

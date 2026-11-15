@@ -28,3 +28,13 @@ val Borde = Color(0xFF6E5E61)
 val EstadoAbierto = Color(0xFF2E7D32)
 val EstadoCerrado = Color(0xFFC62828)
 val EstadoCelebracion = Color(0xFF6A1B9A)
+
+// Colores que el usuario puede elegir para su avatar en "Editar perfil"
+val ColoresAvatar = listOf(
+    Color(0xFF6A1222),   // burdeo
+    Color(0xFF7A5C14),   // dorado
+    Color(0xFF1E5A7A),   // azul
+    Color(0xFF2E6B3F),   // verde
+    Color(0xFF5B2E7A),   // morado
+    Color(0xFF4A3B3E)    // piedra
+)

@@ -25,6 +25,8 @@ import androidx.navigation.NavController
 import com.example.frontend.model.Roles
 import com.example.frontend.navigation.Rutas
 import com.example.frontend.session.Sesion
+import com.example.frontend.database.AppDatabase
+import com.example.frontend.database.SeedData
 import kotlinx.coroutines.delay
 
 @Composable
@@ -34,7 +36,23 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(Unit) {
         delay(1500)
         // Sin sesión -> Login. Con sesión -> pantalla de inicio según el rol.
-        val usuario = Sesion.obtener(context)
+        var usuario = Sesion.obtener(context)
+        if (usuario != null) {
+            // La sesión está en SharedPreferences y los usuarios en Room: si la base se volvió a crear
+            // (por ejemplo al subir su versión), el usuario guardado puede ya no existir.
+            val db = AppDatabase.getDatabase(context)
+            val enBase = try {
+                SeedData.cargarSiEstaVacia(db)
+                db.usuarioDao().buscarPorId(usuario.id)
+            } catch (e: Exception) { null }
+            if (enBase == null || enBase.email != usuario.email) {
+                Sesion.cerrar(context)          // sesión vieja: se pide iniciar sesión de nuevo
+                usuario = null
+            } else {
+                Sesion.guardar(context, enBase.copy(password = ""))   // refresca nombre, apodo y avatar
+                usuario = enBase
+            }
+        }
         val destino = when {
             usuario == null -> Rutas.LOGIN
             usuario.rol == Roles.ENCARGADO -> Rutas.ENC_MI_RECINTO
